@@ -1,0 +1,95 @@
+﻿<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Leaderboard — NM MicroLearn</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../styles/main.css"><link rel="stylesheet" href="../styles/components.css">
+<style>
+.lb-header-card{background:linear-gradient(135deg,#1A1523,#2D1B69,#4F46E5);border-radius:20px;padding:2rem;color:white;margin-bottom:1.5rem;text-align:center;position:relative;overflow:hidden;}
+.podium{display:flex;align-items:flex-end;justify-content:center;gap:1rem;margin:1.5rem 0;}
+.podium-place{display:flex;flex-direction:column;align-items:center;gap:.5rem;}
+.podium-avatar{width:56px;height:56px;border-radius:16px;display:flex;align-items:center;justify-content:center;font-family:'Outfit',sans-serif;font-size:1.1rem;font-weight:800;color:white;}
+.podium-name{font-size:.78rem;font-weight:600;}
+.podium-score{font-family:'Outfit',sans-serif;font-size:.9rem;font-weight:700;}
+.podium-bar{width:80px;border-radius:10px 10px 0 0;display:flex;align-items:center;justify-content:center;padding:.5rem;}
+.podium-rank{font-family:'Outfit',sans-serif;font-size:1.5rem;font-weight:900;}
+.lb-row{display:flex;align-items:center;gap:1rem;padding:.9rem 1rem;border-radius:14px;margin-bottom:.5rem;transition:var(--trans-base);}
+.lb-row:hover{background:var(--milk);}
+.lb-row.mine{background:linear-gradient(135deg,#EEF2FF,#F5F3FF);border:1px solid rgba(79,70,229,0.2);}
+.lb-pos{font-family:'Outfit',sans-serif;font-size:1.1rem;font-weight:700;width:32px;text-align:center;}
+.lb-avatar{width:36px;height:36px;border-radius:10px;font-size:.8rem;font-weight:700;color:white;display:flex;align-items:center;justify-content:center;}
+.lb-info{flex:1;}
+.lb-name{font-size:.9rem;font-weight:600;}
+.lb-meta{font-size:.75rem;color:var(--text-muted);}
+.lb-xp{font-family:'Outfit',sans-serif;font-size:1rem;font-weight:700;color:#4F46E5;}
+.lb-certs{font-size:.75rem;color:var(--text-muted);}
+</style></head>
+<body class="portal-body">
+<aside class="sidebar student-sidebar">
+  <div class="sidebar-header"><div class="sidebar-logo"><svg width="20" height="20" viewBox="0 0 28 28" fill="none"><path d="M14 2L26 8V20L14 26L2 20V8L14 2Z" fill="white"/></svg></div><div><div class="sidebar-brand">NM MicroLearn</div><div class="sidebar-role">Student Portal</div></div></div>
+  <nav class="sidebar-nav">
+    <div class="sidebar-section-label">Main</div>
+    <a href="dashboard.html" class="nav-item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg> Dashboard</a>
+    <a href="projects.html" class="nav-item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/></svg> Browse Projects</a>
+    <a href="applications.html" class="nav-item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg> My Applications</a>
+    <a href="workspace.html" class="nav-item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/></svg> Workspace</a>
+    <div class="sidebar-section-label">Growth</div>
+    <a href="certificates.html" class="nav-item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"/></svg> Certificates</a>
+    <a href="skillgap.html" class="nav-item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg> Skill Gap</a>
+    <a href="portfolio.html" class="nav-item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg> My Portfolio</a>
+    <div class="sidebar-section-label">Community</div>
+    <a href="leaderboard.html" class="nav-item active"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> Leaderboard</a>
+    <a href="messages.html" class="nav-item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg> Messages</a>
+  </nav>
+  <div class="sidebar-footer"><div class="user-info"><div class="user-avatar">AK</div><div><div class="user-name">Arjun Kumar</div><div class="user-email">arjun@psg.ac.in</div></div></div><a href="../index.html" style="display:flex;align-items:center;gap:.5rem;font-size:.8rem;color:var(--text-muted);padding:.5rem .75rem;margin-top:.25rem;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/></svg> Back to Home</a></div>
+</aside>
+<main class="main-content">
+  <div class="topbar"><div class="topbar-left"><div class="topbar-title">Leaderboard</div><div class="topbar-sub">Compete with peers across Tamil Nadu &bull; Updated every 24 hours</div></div>
+    <div class="topbar-right"><span class="badge badge-info" style="font-size:.8rem;padding:.4rem 1rem;">Your Rank: #8 at PSG Tech</span></div>
+  </div>
+  <div class="page-content">
+    <div class="tabs" data-tabs>
+      <button class="tab-btn active-tab" data-tab-target="college">My College</button>
+      <button class="tab-btn" data-tab-target="state">Tamil Nadu State</button>
+      <button class="tab-btn" data-tab-target="monthly">This Month</button>
+    </div>
+    <div data-tab="college" class="tab-pane" style="display:block;">
+      <div class="lb-header-card">
+        <div style="font-size:.85rem;opacity:.7;margin-bottom:.5rem;">PSG College of Technology — August 2026</div>
+        <div style="font-family:'Outfit',sans-serif;font-size:1.5rem;font-weight:800;margin-bottom:1.5rem;">Top Students Leaderboard</div>
+        <div class="podium">
+          <div class="podium-place">
+            <div class="podium-avatar" style="background:linear-gradient(135deg,#94A3B8,#64748B);">KS</div>
+            <div class="podium-name" style="color:rgba(255,255,255,.8);">Karthik S</div>
+            <div class="podium-score" style="color:rgba(255,255,255,.7);">2,420 XP</div>
+            <div class="podium-bar" style="background:#64748B;height:70px;"><div class="podium-rank">2</div></div>
+          </div>
+          <div class="podium-place">
+            <div style="font-size:2.5rem;margin-bottom:.5rem;">&#129351;</div>
+            <div class="podium-avatar" style="background:linear-gradient(135deg,#F59E0B,#D97706);font-size:1.2rem;width:64px;height:64px;">PN</div>
+            <div class="podium-name" style="color:white;font-size:.9rem;">Priya Nair</div>
+            <div class="podium-score" style="color:#FDE68A;">2,840 XP</div>
+            <div class="podium-bar" style="background:#F59E0B;height:100px;"><div class="podium-rank">1</div></div>
+          </div>
+          <div class="podium-place">
+            <div class="podium-avatar" style="background:linear-gradient(135deg,#A16207,#78350F);">DM</div>
+            <div class="podium-name" style="color:rgba(255,255,255,.8);">Divya M</div>
+            <div class="podium-score" style="color:rgba(255,255,255,.7);">2,100 XP</div>
+            <div class="podium-bar" style="background:#A16207;height:55px;"><div class="podium-rank">3</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="card"><div class="card-body">
+        <div class="lb-row"><div class="lb-pos rank-1">1</div><div class="lb-avatar" style="background:linear-gradient(135deg,#F59E0B,#D97706);">PN</div><div class="lb-info"><div class="lb-name">Priya Nair</div><div class="lb-meta">CSE-A &bull; 7 projects &bull; 3 certs</div></div><div class="lb-certs">&#127942; &#127942; &#127942;</div><div class="lb-xp">2,840 XP</div></div>
+        <div class="lb-row"><div class="lb-pos rank-2">2</div><div class="lb-avatar" style="background:linear-gradient(135deg,#94A3B8,#64748B);">KS</div><div class="lb-info"><div class="lb-name">Karthik Selvam</div><div class="lb-meta">IT-B &bull; 6 projects &bull; 3 certs</div></div><div class="lb-certs">&#127942; &#127942; &#127942;</div><div class="lb-xp">2,420 XP</div></div>
+        <div class="lb-row"><div class="lb-pos rank-3">3</div><div class="lb-avatar" style="background:linear-gradient(135deg,#A16207,#78350F);">DM</div><div class="lb-info"><div class="lb-name">Divya Mohan</div><div class="lb-meta">ECE-A &bull; 5 projects &bull; 2 certs</div></div><div class="lb-certs">&#127942; &#127942;</div><div class="lb-xp">2,100 XP</div></div>
+        <div class="lb-row"><div class="lb-pos" style="color:#4F46E5;">4</div><div class="lb-avatar" style="background:linear-gradient(135deg,#4F46E5,#7C3AED);">RS</div><div class="lb-info"><div class="lb-name">Ramesh S</div><div class="lb-meta">CSE-B &bull; 5 projects &bull; 2 certs</div></div><div class="lb-certs">&#127942; &#127942;</div><div class="lb-xp">1,980 XP</div></div>
+        <div class="lb-row"><div class="lb-pos" style="color:#4F46E5;">5</div><div class="lb-avatar" style="background:linear-gradient(135deg,#059669,#0891B2);">SV</div><div class="lb-info"><div class="lb-name">Sindhu V</div><div class="lb-meta">IT-A &bull; 4 projects &bull; 2 certs</div></div><div class="lb-certs">&#127942; &#127942;</div><div class="lb-xp">1,840 XP</div></div>
+        <div style="text-align:center;padding:.75rem;font-size:.82rem;color:var(--text-muted);">&bull;&bull;&bull; 2 more students &bull;&bull;&bull;</div>
+        <div class="lb-row mine"><div class="lb-pos" style="color:#4F46E5;">8</div><div class="lb-avatar" style="background:linear-gradient(135deg,#4F46E5,#7C3AED);">AK</div><div class="lb-info"><div class="lb-name">Arjun Kumar (You &#128075;)</div><div class="lb-meta">CSE-B &bull; 4 projects &bull; 3 certs</div></div><div class="lb-certs">&#127942; &#127942; &#127942;</div><div class="lb-xp">1,420 XP</div></div>
+      </div></div>
+    </div>
+    <div data-tab="state" class="tab-pane"></div>
+    <div data-tab="monthly" class="tab-pane"></div>
+  </div>
+</main>
+<script src="../scripts/main.js"></script>
+</body></html>

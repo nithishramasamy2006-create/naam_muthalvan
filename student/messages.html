@@ -1,0 +1,90 @@
+﻿<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Messages — NM MicroLearn</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../styles/main.css"><link rel="stylesheet" href="../styles/components.css">
+<style>
+.messages-layout{display:grid;grid-template-columns:300px 1fr;height:calc(100vh - 70px);gap:0;}
+.conversations{border-right:1px solid var(--border);overflow-y:auto;background:white;}
+.conv-search{padding:1rem;border-bottom:1px solid var(--border);}
+.conv-search input{width:100%;padding:.6rem 1rem;border:1.5px solid var(--border);border-radius:12px;font-size:.875rem;outline:none;font-family:'Inter',sans-serif;}
+.conv-item{display:flex;align-items:center;gap:.75rem;padding:1rem 1.25rem;cursor:pointer;border-bottom:1px solid var(--border);transition:var(--trans-base);}
+.conv-item:hover,.conv-item.active{background:#F5F3FF;}
+.conv-avatar{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:.85rem;font-weight:700;color:white;flex-shrink:0;position:relative;}
+.conv-online{position:absolute;bottom:0;right:0;width:10px;height:10px;border-radius:50%;background:#10B981;border:2px solid white;}
+.conv-name{font-size:.875rem;font-weight:600;}
+.conv-last{font-size:.75rem;color:var(--text-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:160px;}
+.conv-time{font-size:.7rem;color:var(--text-muted);white-space:nowrap;}
+.conv-unread{width:18px;height:18px;border-radius:50%;background:#4F46E5;color:white;font-size:.65rem;font-weight:700;display:flex;align-items:center;justify-content:center;margin-left:auto;}
+.chat-panel{display:flex;flex-direction:column;background:var(--milk);}
+.chat-panel-header{background:white;padding:1rem 1.5rem;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:1rem;}
+.chat-body{flex:1;padding:1.5rem;overflow-y:auto;display:flex;flex-direction:column;gap:.75rem;}
+.chat-footer{padding:1rem 1.5rem;background:white;border-top:1px solid var(--border);display:flex;gap:.75rem;}
+.chat-footer input{flex:1;padding:.75rem 1rem;border:1.5px solid var(--border);border-radius:14px;font-size:.875rem;outline:none;font-family:'Inter',sans-serif;}
+.chat-footer input:focus{border-color:#4F46E5;}
+.send-btn{padding:.75rem 1.5rem;background:linear-gradient(135deg,#4F46E5,#7C3AED);color:white;border:none;border-radius:14px;font-weight:600;cursor:pointer;}
+</style></head>
+<body class="portal-body">
+<aside class="sidebar student-sidebar">
+  <div class="sidebar-header"><div class="sidebar-logo"><svg width="20" height="20" viewBox="0 0 28 28" fill="none"><path d="M14 2L26 8V20L14 26L2 20V8L14 2Z" fill="white"/></svg></div><div><div class="sidebar-brand">NM MicroLearn</div><div class="sidebar-role">Student Portal</div></div></div>
+  <nav class="sidebar-nav">
+    <div class="sidebar-section-label">Main</div>
+    <a href="dashboard.html" class="nav-item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg> Dashboard</a>
+    <a href="projects.html" class="nav-item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/></svg> Browse Projects</a>
+    <a href="applications.html" class="nav-item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg> My Applications</a>
+    <a href="workspace.html" class="nav-item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/></svg> Workspace</a>
+    <div class="sidebar-section-label">Growth</div>
+    <a href="certificates.html" class="nav-item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"/></svg> Certificates</a>
+    <a href="skillgap.html" class="nav-item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg> Skill Gap</a>
+    <a href="portfolio.html" class="nav-item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg> My Portfolio</a>
+    <div class="sidebar-section-label">Community</div>
+    <a href="leaderboard.html" class="nav-item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> Leaderboard</a>
+    <a href="messages.html" class="nav-item active"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg> Messages <span class="nav-badge">2</span></a>
+  </nav>
+  <div class="sidebar-footer"><div class="user-info"><div class="user-avatar">AK</div><div><div class="user-name">Arjun Kumar</div><div class="user-email">arjun@psg.ac.in</div></div></div><a href="../index.html" style="display:flex;align-items:center;gap:.5rem;font-size:.8rem;color:var(--text-muted);padding:.5rem .75rem;margin-top:.25rem;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/></svg> Back to Home</a></div>
+</aside>
+<main class="main-content" style="display:flex;flex-direction:column;">
+  <div class="topbar"><div class="topbar-left"><div class="topbar-title">Messages</div><div class="topbar-sub">Real-time chat with mentors and platform support</div></div>
+    <div class="topbar-right"><span class="badge badge-info">2 Unread</span></div>
+  </div>
+  <div class="messages-layout">
+    <div class="conversations">
+      <div class="conv-search"><input type="text" placeholder="&#128269; Search conversations..."></div>
+      <div class="conv-item active">
+        <div class="conv-avatar" style="background:linear-gradient(135deg,#059669,#0891B2);">KR<div class="conv-online"></div></div>
+        <div style="flex:1;min-width:0;"><div style="display:flex;justify-content:space-between;"><div class="conv-name">Kavitha Rajan</div><div class="conv-time">10:32</div></div><div class="conv-last">Perfect! You're on track. See you at the demo on Sep 10. &#128074;</div></div>
+        <div class="conv-unread">2</div>
+      </div>
+      <div class="conv-item">
+        <div class="conv-avatar" style="background:linear-gradient(135deg,#F59E0B,#EA580C);">AR</div>
+        <div style="flex:1;min-width:0;"><div style="display:flex;justify-content:space-between;"><div class="conv-name">Anjali Rajan</div><div class="conv-time">Aug 28</div></div><div class="conv-last">Your certificate has been issued! &#127942; Congrats!</div></div>
+      </div>
+      <div class="conv-item">
+        <div class="conv-avatar" style="background:linear-gradient(135deg,#7C3AED,#4F46E5);">NM<div class="conv-online"></div></div>
+        <div style="flex:1;min-width:0;"><div style="display:flex;justify-content:space-between;"><div class="conv-name">Platform Support</div><div class="conv-time">Aug 25</div></div><div class="conv-last">Your profile has been verified successfully.</div></div>
+      </div>
+      <div class="conv-item">
+        <div class="conv-avatar" style="background:linear-gradient(135deg,#EA580C,#DC2626);">SR</div>
+        <div style="flex:1;min-width:0;"><div style="display:flex;justify-content:space-between;"><div class="conv-name">Suresh Rajan</div><div class="conv-time">Aug 22</div></div><div class="conv-last">Great work on the React dashboard! Sending feedback now.</div></div>
+      </div>
+    </div>
+    <div class="chat-panel">
+      <div class="chat-panel-header">
+        <div class="conv-avatar" style="background:linear-gradient(135deg,#059669,#0891B2);width:40px;height:40px;border-radius:12px;">KR<div class="conv-online"></div></div>
+        <div><div style="font-size:.95rem;font-weight:700;">Kavitha Rajan</div><div style="font-size:.78rem;color:#059669;font-weight:500;">&#128994; Online &bull; Tech Lead, Zoho Corp</div></div>
+      </div>
+      <div class="chat-body">
+        <div style="text-align:center;font-size:.75rem;color:var(--text-muted);padding:.5rem;">Aug 29, 2026</div>
+        <div class="msg-row"><div class="msg-avatar" style="background:linear-gradient(135deg,#059669,#0891B2);">KR</div><div><div class="msg-bubble other">Hi Arjun! How's the chart component coming along?</div><div class="msg-time">9:15 AM</div></div></div>
+        <div class="msg-row mine"><div class="msg-avatar" style="background:linear-gradient(135deg,#4F46E5,#7C3AED);">AK</div><div><div class="msg-bubble mine">Hi! Almost done. Using Chart.js for bar and line charts. Should have it ready by tomorrow.</div><div class="msg-time">9:22 AM</div></div></div>
+        <div class="msg-row"><div class="msg-avatar" style="background:linear-gradient(135deg,#059669,#0891B2);">KR</div><div><div class="msg-bubble other">Great! Make sure to add data filters — by date range and category. Also the export PDF feature would be a bonus.</div><div class="msg-time">9:25 AM</div></div></div>
+        <div class="msg-row mine"><div class="msg-avatar" style="background:linear-gradient(135deg,#4F46E5,#7C3AED);">AK</div><div><div class="msg-bubble mine">Sure! I'm adding date range filter now. I'll add PDF export if I finish early &#128522;</div><div class="msg-time">9:30 AM</div></div></div>
+        <div class="msg-row"><div class="msg-avatar" style="background:linear-gradient(135deg,#059669,#0891B2);">KR</div><div><div class="msg-bubble other">Perfect! You're on track. See you at the demo on Sep 10. &#128074;</div><div class="msg-time">9:32 AM</div></div></div>
+        <div style="text-align:center;font-size:.75rem;color:var(--text-muted);padding:.5rem;">Today</div>
+        <div class="msg-row"><div class="msg-avatar" style="background:linear-gradient(135deg,#059669,#0891B2);">KR</div><div><div class="msg-bubble other">Hi Arjun! Just checking in. How many tasks are done from the kanban board?</div><div class="msg-time">10:32 AM</div></div></div>
+      </div>
+      <div class="chat-footer"><input type="text" placeholder="Type your message..."><button class="send-btn">Send &#8594;</button></div>
+    </div>
+  </div>
+</main>
+<script src="../scripts/main.js"></script>
+</body></html>

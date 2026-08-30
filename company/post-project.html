@@ -1,0 +1,103 @@
+﻿<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Post Project — NM MicroLearn Company</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../styles/main.css"><link rel="stylesheet" href="../styles/components.css">
+<style>
+.post-form-card{background:white;border-radius:24px;border:1px solid var(--border);padding:2rem;box-shadow:var(--shadow-sm);}
+.form-section-title{font-family:'Outfit',sans-serif;font-size:1rem;font-weight:700;margin-bottom:1rem;padding-bottom:.75rem;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:.5rem;}
+.skill-picker{display:flex;flex-wrap:wrap;gap:.5rem;}
+.skill-chip-pick{padding:.35rem .85rem;border-radius:50px;border:1.5px solid var(--border);font-size:.8rem;font-weight:600;cursor:pointer;transition:var(--trans-base);background:white;}
+.skill-chip-pick.selected{background:var(--company-primary);color:white;border-color:var(--company-primary);}
+.form-input-company:focus{border-color:var(--company-primary);box-shadow:0 0 0 3px rgba(234,88,12,0.1);}
+.submit-project-btn{width:100%;padding:1rem;background:linear-gradient(135deg,#EA580C,#DC2626);color:white;border:none;border-radius:14px;font-size:1rem;font-weight:700;cursor:pointer;transition:var(--trans-base);margin-top:1.5rem;}
+.submit-project-btn:hover{transform:translateY(-2px);box-shadow:0 8px 25px rgba(234,88,12,0.4);}
+.preview-card{background:var(--milk);border-radius:16px;padding:1.25rem;border:1px solid var(--border);margin-top:1rem;}
+</style></head>
+<body class="portal-body">
+<aside class="sidebar company-sidebar">
+  <div class="sidebar-header"><div class="sidebar-logo"><svg width="20" height="20" viewBox="0 0 28 28" fill="none"><path d="M14 2L26 8V20L14 26L2 20V8L14 2Z" fill="white"/></svg></div><div><div class="sidebar-brand">NM MicroLearn</div><div class="sidebar-role">Company Portal</div></div></div>
+  <nav class="sidebar-nav">
+    <div class="sidebar-section-label">Main</div>
+    <a href="dashboard.html" class="nav-item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg> Dashboard</a>
+    <a href="post-project.html" class="nav-item active"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg> Post New Project</a>
+    <a href="projects.html" class="nav-item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/></svg> My Projects</a>
+    <div class="sidebar-section-label">Talent</div>
+    <a href="applicants.html" class="nav-item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg> Applicants <span class="nav-badge">8</span></a>
+    <a href="submissions.html" class="nav-item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/></svg> Review Submissions</a>
+    <a href="certificates.html" class="nav-item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"/></svg> Issue Certificates</a>
+    <div class="sidebar-section-label">Analytics</div>
+    <a href="analytics.html" class="nav-item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg> Analytics</a>
+    <a href="mentors.html" class="nav-item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> Mentors</a>
+  </nav>
+  <div class="sidebar-footer"><div class="user-info"><div class="user-avatar">HX</div><div><div class="user-name">Hexaware Tech</div><div class="user-email">hr@hexaware.com</div></div></div><a href="../index.html" style="display:flex;align-items:center;gap:.5rem;font-size:.8rem;color:var(--text-muted);padding:.5rem .75rem;margin-top:.25rem;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/></svg> Back to Home</a></div>
+</aside>
+<main class="main-content">
+  <div class="topbar"><div class="topbar-left"><div class="topbar-title">Post New Project</div><div class="topbar-sub">Fill in the project details to attract the best student talent</div></div></div>
+  <div class="page-content">
+    <div class="steps">
+      <div class="step active"><div class="step-circle">1</div><div class="step-label">Project Details</div></div>
+      <div class="step-line"></div>
+      <div class="step"><div class="step-circle">2</div><div class="step-label">Requirements</div></div>
+      <div class="step-line"></div>
+      <div class="step"><div class="step-circle">3</div><div class="step-label">Mentor &amp; Slots</div></div>
+      <div class="step-line"></div>
+      <div class="step"><div class="step-circle">4</div><div class="step-label">Review &amp; Publish</div></div>
+    </div>
+    <div class="grid-2">
+      <div>
+        <div class="post-form-card">
+          <div class="form-section-title">&#128203; Project Details</div>
+          <div class="form-group"><label class="form-label">Project Title *</label><input class="form-input form-input-company" type="text" placeholder="e.g. React Dashboard for E-Commerce Platform" value="IoT Smart Home Automation System"></div>
+          <div class="form-group"><label class="form-label">Project Description *</label><textarea class="form-input form-textarea form-input-company" placeholder="Describe the project scope, goals, and what students will build...">Build a smart home automation system using IoT sensors, Arduino, and a web dashboard. Students will work with MQTT protocol, Node.js backend, and React frontend to create a real-time monitoring system.</textarea></div>
+          <div class="form-row">
+            <div class="form-group"><label class="form-label">Domain *</label><select class="form-input form-select form-input-company"><option>IoT &amp; Embedded</option><option>Web Development</option><option>Data Science</option><option>Mobile Dev</option></select></div>
+            <div class="form-group"><label class="form-label">Duration *</label><select class="form-input form-select form-input-company"><option>2 weeks</option><option selected>4 weeks</option><option>6 weeks</option><option>8 weeks</option></select></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label class="form-label">Stipend (Rs.)</label><input class="form-input form-input-company" type="number" placeholder="0 for volunteer" value="2000"></div>
+            <div class="form-group"><label class="form-label">Student Slots *</label><input class="form-input form-input-company" type="number" min="1" max="20" value="5"></div>
+          </div>
+          <div class="form-section-title" style="margin-top:1rem;">&#127919; Required Skills</div>
+          <div class="skill-picker">
+            <div class="skill-chip-pick selected">IoT</div><div class="skill-chip-pick selected">Arduino</div><div class="skill-chip-pick selected">Node.js</div><div class="skill-chip-pick selected">React</div><div class="skill-chip-pick selected">MQTT</div>
+            <div class="skill-chip-pick">Python</div><div class="skill-chip-pick">MongoDB</div><div class="skill-chip-pick">Flutter</div><div class="skill-chip-pick">AWS</div><div class="skill-chip-pick">Docker</div><div class="skill-chip-pick">ML</div><div class="skill-chip-pick">TypeScript</div>
+          </div>
+          <div class="form-section-title" style="margin-top:1.25rem;">&#128100; Mentor Details</div>
+          <div class="form-row">
+            <div class="form-group"><label class="form-label">Mentor Name *</label><input class="form-input form-input-company" type="text" value="Suresh Rajan"></div>
+            <div class="form-group"><label class="form-label">Mentor Designation</label><input class="form-input form-input-company" type="text" value="Senior IoT Engineer"></div>
+          </div>
+          <div class="form-group"><label class="form-label">Mentor Email</label><input class="form-input form-input-company" type="email" value="suresh.rajan@hexaware.com"></div>
+          <button class="submit-project-btn">&#9889; Publish Project Now</button>
+          <button style="width:100%;padding:.75rem;background:white;border:1.5px solid var(--border);border-radius:14px;font-size:.9rem;font-weight:600;cursor:pointer;margin-top:.75rem;color:var(--text-secondary);">&#128196; Save as Draft</button>
+        </div>
+      </div>
+      <div>
+        <div class="card" style="margin-bottom:1.25rem;">
+          <div class="card-header"><span class="card-title">&#128065;&#65039; Live Preview</span></div>
+          <div class="card-body">
+            <div class="project-card" style="cursor:default;">
+              <div style="display:flex;justify-content:space-between;margin-bottom:.75rem;"><div class="project-card-tags" style="margin-bottom:0;"><span class="skill-tag">IoT</span><span class="skill-tag">Arduino</span><span class="skill-tag">React</span></div><span style="font-size:.75rem;background:#ECFDF5;color:#065F46;padding:.2rem .6rem;border-radius:50px;font-weight:600;">&#9989; Verified Co.</span></div>
+              <div class="project-card-title">IoT Smart Home Automation System</div>
+              <div class="project-card-desc">Build a smart home automation system using IoT sensors, Arduino, and a web dashboard with real-time monitoring.</div>
+              <div style="display:flex;gap:.75rem;margin-bottom:.75rem;font-size:.8rem;color:var(--text-muted);"><span>&#128336; 4 weeks</span><span>&bull;</span><span>&#128176; Rs.2,000</span><span>&bull;</span><span>&#128101; 5 slots</span></div>
+              <div class="project-card-meta"><div style="display:flex;align-items:center;gap:.5rem;"><div style="width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,#EA580C,#DC2626);display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:700;color:white;">HX</div><div class="project-company">Hexaware Technologies</div></div><button class="apply-btn apply-btn-company">Apply Now</button></div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header"><span class="card-title">&#128161; Posting Tips</span></div>
+          <div class="card-body"><div style="display:flex;flex-direction:column;gap:.75rem;font-size:.85rem;color:var(--text-secondary);">
+            <div>&#128293; <strong>Clear title</strong> — Include the technology stack (e.g. "React + Node.js Dashboard")</div>
+            <div>&#127919; <strong>Specific skills</strong> — Select 3-5 relevant skills for best matching</div>
+            <div>&#128176; <strong>Stipend</strong> — Projects with stipend get 3x more applications</div>
+            <div>&#128100; <strong>Active mentor</strong> — Students value responsive mentors highly</div>
+            <div>&#128336; <strong>Duration</strong> — 3-5 week projects have highest completion rates</div>
+          </div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+<script src="../scripts/main.js"></script>
+</body></html>

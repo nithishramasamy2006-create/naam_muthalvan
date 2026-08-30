@@ -1,0 +1,271 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Student Dashboard — NM MicroLearn</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../styles/main.css">
+<style>
+.xp-bar{height:8px;background:#EEF2FF;border-radius:10px;overflow:hidden;margin-top:.5rem;}
+.xp-fill{height:100%;background:linear-gradient(90deg,#4F46E5,#7C3AED);border-radius:10px;width:68%;transition:width 1.5s ease;}
+.xp-label{display:flex;justify-content:space-between;font-size:.75rem;color:var(--text-muted);margin-top:.3rem;}
+.badge-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:.75rem;}
+.badge-item{text-align:center;padding:.75rem .5rem;background:var(--milk);border-radius:14px;border:1px solid var(--border);}
+.badge-emoji{font-size:1.75rem;display:block;margin-bottom:.25rem;}
+.badge-name{font-size:.7rem;font-weight:600;color:var(--text-secondary);}
+.badge-item.locked{opacity:.4;filter:grayscale(1);}
+.skill-gap-item{display:flex;align-items:center;justify-content:space-between;padding:.75rem 0;border-bottom:1px solid var(--border);}
+.skill-gap-item:last-child{border:none;}
+.skill-gap-name{font-size:.875rem;font-weight:500;}
+.skill-gap-status{font-size:.75rem;font-weight:600;padding:.2rem .6rem;border-radius:50px;}
+.status-done{background:#D1FAE5;color:#065F46;}
+.status-partial{background:#FEF3C7;color:#92400E;}
+.status-missing{background:#FEE2E2;color:#991B1B;}
+.project-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1rem;}
+.app-track-item{display:flex;align-items:center;gap:1rem;padding:1rem;background:var(--milk);border-radius:14px;border:1px solid var(--border);margin-bottom:.75rem;transition:var(--trans-base);}
+.app-track-item:hover{background:white;box-shadow:var(--shadow-sm);}
+.app-logo{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;background:var(--student-light);}
+.app-info{flex:1;}
+.app-title{font-size:.9rem;font-weight:600;}
+.app-company{font-size:.78rem;color:var(--text-muted);}
+.app-status-col{text-align:right;}
+.app-date{font-size:.72rem;color:var(--text-muted);margin-top:.2rem;}
+.portfolio-preview{background:linear-gradient(135deg,#4F46E5 0%,#7C3AED 100%);border-radius:20px;padding:2rem;color:white;position:relative;overflow:hidden;}
+.portfolio-preview::before{content:'';position:absolute;top:-40px;right:-40px;width:200px;height:200px;background:rgba(255,255,255,0.08);border-radius:50%;}
+.portfolio-preview::after{content:'';position:absolute;bottom:-60px;left:-20px;width:160px;height:160px;background:rgba(255,255,255,0.05);border-radius:50%;}
+.portfolio-title{font-family:'Outfit',sans-serif;font-size:1.2rem;font-weight:700;margin-bottom:.5rem;}
+.portfolio-sub{font-size:.85rem;opacity:.8;margin-bottom:1.5rem;}
+.portfolio-stats{display:flex;gap:1.5rem;}
+.p-stat{text-align:center;}
+.p-stat-val{font-family:'Outfit',sans-serif;font-size:1.5rem;font-weight:800;}
+.p-stat-label{font-size:.7rem;opacity:.7;}
+.view-portfolio-btn{display:inline-flex;align-items:center;gap:.4rem;padding:.5rem 1.25rem;background:rgba(255,255,255,0.2);border-radius:50px;font-size:.82rem;font-weight:600;margin-top:1rem;color:white;border:1px solid rgba(255,255,255,0.3);cursor:pointer;transition:var(--trans-base);}
+.view-portfolio-btn:hover{background:rgba(255,255,255,0.3);}
+</style>
+</head>
+<body class="portal-body">
+<aside class="sidebar student-sidebar">
+  <div class="sidebar-header">
+    <div class="sidebar-logo"><svg width="20" height="20" viewBox="0 0 28 28" fill="none"><path d="M14 2L26 8V20L14 26L2 20V8L14 2Z" fill="white"/></svg></div>
+    <div><div class="sidebar-brand">NM MicroLearn</div><div class="sidebar-role">Student Portal</div></div>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="sidebar-section-label">Main</div>
+    <div class="nav-item active"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg> Dashboard</div>
+    <a href="projects.html" class="nav-item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/></svg> Browse Projects</a>
+    <div class="nav-item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg> My Applications <span class="nav-badge">3</span></div>
+    <div class="nav-item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/></svg> Submissions</div>
+    <div class="sidebar-section-label">Growth</div>
+    <div class="nav-item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"/></svg> Certificates</div>
+    <div class="nav-item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg> Skill Gap Analysis</div>
+    <div class="nav-item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg> My Portfolio</div>
+    <div class="sidebar-section-label">Community</div>
+    <div class="nav-item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> Leaderboard</div>
+    <div class="nav-item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg> Messages <span class="nav-badge">2</span></div>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="user-info">
+      <div class="user-avatar">AK</div>
+      <div><div class="user-name">Arjun Kumar</div><div class="user-email">arjun@psg.ac.in</div></div>
+    </div>
+    <a href="../index.html" style="display:flex;align-items:center;gap:.5rem;font-size:.8rem;color:var(--text-muted);padding:.5rem .75rem;margin-top:.25rem;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/></svg> Back to Home</a>
+  </div>
+</aside>
+
+<main class="main-content">
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="topbar-title">Good morning, Arjun! &#127774;</div>
+      <div class="topbar-sub">You have 3 pending applications and 1 project milestone due this week.</div>
+    </div>
+    <div class="topbar-right">
+      <div class="icon-btn notif-btn"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 01-3.46 0"/></svg><div class="notif-dot"></div></div>
+      <div class="user-avatar" style="background:linear-gradient(135deg,#4F46E5,#7C3AED);">AK</div>
+    </div>
+  </div>
+
+  <div class="page-content">
+    <!-- XP and Level -->
+    <div class="card" style="margin-bottom:1.25rem;">
+      <div class="card-body" style="padding:1.5rem;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;">
+          <div style="display:flex;align-items:center;gap:1rem;">
+            <div style="width:56px;height:56px;border-radius:16px;background:linear-gradient(135deg,#4F46E5,#7C3AED);display:flex;align-items:center;justify-content:center;font-family:'Outfit',sans-serif;font-size:1.25rem;font-weight:800;color:white;">L6</div>
+            <div>
+              <div style="font-family:'Outfit',sans-serif;font-size:1.1rem;font-weight:700;">Level 6 &mdash; Rising Coder</div>
+              <div style="font-size:.8rem;color:var(--text-muted);">1,420 / 2,000 XP to Level 7</div>
+            </div>
+          </div>
+          <div style="display:flex;gap:.5rem;">
+            <span style="padding:.3rem .75rem;background:#EEF2FF;color:#4F46E5;border-radius:50px;font-size:.75rem;font-weight:700;">&#127942; 5 Badges</span>
+            <span style="padding:.3rem .75rem;background:#ECFDF5;color:#059669;border-radius:50px;font-size:.75rem;font-weight:700;">&#9989; 3 Certs</span>
+            <span style="padding:.3rem .75rem;background:#FFF7ED;color:#EA580C;border-radius:50px;font-size:.75rem;font-weight:700;">&#127775; 24 NM Credits</span>
+          </div>
+        </div>
+        <div class="xp-bar"><div class="xp-fill"></div></div>
+        <div class="xp-label"><span>1,420 XP</span><span>2,000 XP</span></div>
+      </div>
+    </div>
+
+    <!-- Stats Row -->
+    <div class="stats-row">
+      <div class="stat-widget student-stat">
+        <div class="stat-widget-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/></svg></div>
+        <div><div class="stat-widget-val">12</div><div class="stat-widget-label">Projects Applied</div><div class="stat-widget-change change-up">&#8593; 4 this month</div></div>
+      </div>
+      <div class="stat-widget student-stat">
+        <div class="stat-widget-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div>
+        <div><div class="stat-widget-val">4</div><div class="stat-widget-label">Completed</div><div class="stat-widget-change change-up">&#8593; 2 this month</div></div>
+      </div>
+      <div class="stat-widget student-stat">
+        <div class="stat-widget-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"/></svg></div>
+        <div><div class="stat-widget-val">3</div><div class="stat-widget-label">Certificates</div><div class="stat-widget-change change-up">&#8593; 1 new</div></div>
+      </div>
+      <div class="stat-widget student-stat">
+        <div class="stat-widget-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+        <div><div class="stat-widget-val">#8</div><div class="stat-widget-label">College Rank</div><div class="stat-widget-change change-up">&#8593; 3 places</div></div>
+      </div>
+    </div>
+
+    <div class="grid-2" style="margin-bottom:1.25rem;">
+      <!-- Recommended Projects -->
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">&#127919; Recommended For You</span>
+          <a href="projects.html" style="font-size:.8rem;color:var(--student-primary);font-weight:600;">View all</a>
+        </div>
+        <div class="card-body" style="display:flex;flex-direction:column;gap:.75rem;">
+          <div class="project-card" style="padding:1rem;">
+            <div class="project-card-tags"><span class="skill-tag">React</span><span class="skill-tag">Node.js</span></div>
+            <div class="project-card-title">E-Commerce Dashboard UI</div>
+            <div class="project-card-desc" style="font-size:.8rem;-webkit-line-clamp:2;display:-webkit-box;-webkit-box-orient:vertical;overflow:hidden;">Build a responsive admin dashboard for a Coimbatore-based startup using React and Chart.js.</div>
+            <div class="project-card-meta">
+              <div class="project-meta-left"><div class="project-company">TechBridge Pvt Ltd</div><div class="project-duration">&#128336; 3 weeks &bull; &#128176; Rs.2000 stipend</div></div>
+              <button class="apply-btn apply-btn-student">Apply Now</button>
+            </div>
+          </div>
+          <div class="project-card" style="padding:1rem;">
+            <div class="project-card-tags"><span class="skill-tag">Python</span><span class="skill-tag">ML</span></div>
+            <div class="project-card-title">Sentiment Analysis Tool</div>
+            <div class="project-card-desc" style="font-size:.8rem;-webkit-line-clamp:2;display:-webkit-box;-webkit-box-orient:vertical;overflow:hidden;">Analyze customer reviews for a retail company using NLP and Python.</div>
+            <div class="project-card-meta">
+              <div class="project-meta-left"><div class="project-company">DataMinds Analytics</div><div class="project-duration">&#128336; 4 weeks &bull; &#128176; Rs.3000 stipend</div></div>
+              <button class="apply-btn apply-btn-student">Apply Now</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Application Tracker -->
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">&#128203; Application Tracker</span>
+          <span class="badge badge-info">3 Active</span>
+        </div>
+        <div class="card-body" style="padding:1rem 1.25rem;">
+          <div class="app-track-item">
+            <div class="app-logo">&#128187;</div>
+            <div class="app-info"><div class="app-title">IoT Smart Home System</div><div class="app-company">Hexaware Technologies</div></div>
+            <div class="app-status-col"><span class="badge badge-warning">Under Review</span><div class="app-date">Applied 3 days ago</div></div>
+          </div>
+          <div class="app-track-item">
+            <div class="app-logo">&#127760;</div>
+            <div class="app-info"><div class="app-title">REST API Development</div><div class="app-company">Freshworks</div></div>
+            <div class="app-status-col"><span class="badge badge-success">Shortlisted &#127881;</span><div class="app-date">Applied 1 week ago</div></div>
+          </div>
+          <div class="app-track-item">
+            <div class="app-logo">&#128202;</div>
+            <div class="app-info"><div class="app-title">Data Visualization Tool</div><div class="app-company">Zoho Corp</div></div>
+            <div class="app-status-col"><span class="badge badge-info">In Progress</span><div class="app-date">Started 2 weeks ago</div></div>
+          </div>
+          <div class="app-track-item">
+            <div class="app-logo">&#127774;</div>
+            <div class="app-info"><div class="app-title">Mobile App UI Design</div><div class="app-company">PayU India</div></div>
+            <div class="app-status-col"><span class="badge badge-success">Completed &#127942;</span><div class="app-date">Finished 1 month ago</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid-2" style="margin-bottom:1.25rem;">
+      <!-- Skill Gap -->
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">&#127774; Skill Gap Analysis (Full Stack Dev)</span>
+          <span style="font-size:.8rem;color:var(--student-primary);font-weight:600;">vs NM Taxonomy</span>
+        </div>
+        <div class="card-body">
+          <div class="skill-gap-item"><span class="skill-gap-name">HTML/CSS</span><span class="skill-gap-status status-done">&#9989; Mastered</span></div>
+          <div class="skill-gap-item"><span class="skill-gap-name">JavaScript</span><span class="skill-gap-status status-done">&#9989; Mastered</span></div>
+          <div class="skill-gap-item"><span class="skill-gap-name">React.js</span><span class="skill-gap-status status-partial">&#9888;&#65039; Intermediate</span></div>
+          <div class="skill-gap-item"><span class="skill-gap-name">Node.js</span><span class="skill-gap-status status-partial">&#9888;&#65039; Beginner</span></div>
+          <div class="skill-gap-item"><span class="skill-gap-name">MongoDB</span><span class="skill-gap-status status-missing">&#10060; Not Started</span></div>
+          <div class="skill-gap-item"><span class="skill-gap-name">System Design</span><span class="skill-gap-status status-missing">&#10060; Not Started</span></div>
+          <div style="margin-top:1rem;padding:.75rem;background:#EEF2FF;border-radius:12px;">
+            <div style="font-size:.8rem;font-weight:600;color:var(--student-primary);margin-bottom:.35rem;">&#127775; Placement Readiness</div>
+            <div class="progress-bar"><div class="progress-fill" style="width:58%;background:linear-gradient(90deg,#4F46E5,#7C3AED);"></div></div>
+            <div style="font-size:.75rem;color:var(--text-muted);margin-top:.3rem;">58% — Complete 2 more projects to hit 80%</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Portfolio + Badges -->
+      <div style="display:flex;flex-direction:column;gap:1.25rem;">
+        <div class="portfolio-preview">
+          <div style="position:relative;z-index:1;">
+            <div class="portfolio-title">&#128188; My Portfolio</div>
+            <div class="portfolio-sub">Auto-generated from your completed projects</div>
+            <div class="portfolio-stats">
+              <div class="p-stat"><div class="p-stat-val">4</div><div class="p-stat-label">Projects</div></div>
+              <div class="p-stat"><div class="p-stat-val">3</div><div class="p-stat-label">Certificates</div></div>
+              <div class="p-stat"><div class="p-stat-val">1.2K</div><div class="p-stat-label">Profile Views</div></div>
+            </div>
+            <div class="view-portfolio-btn">View Live Portfolio &#8599;&#65039;</div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header"><span class="card-title">&#127942; Achievements</span></div>
+          <div class="card-body">
+            <div class="badge-grid">
+              <div class="badge-item"><span class="badge-emoji">&#127769;</span><div class="badge-name">First Project</div></div>
+              <div class="badge-item"><span class="badge-emoji">&#128293;</span><div class="badge-name">Fast Finisher</div></div>
+              <div class="badge-item"><span class="badge-emoji">&#127775;</span><div class="badge-name">5-Star Rated</div></div>
+              <div class="badge-item"><span class="badge-emoji">&#127910;</span><div class="badge-name">Team Player</div></div>
+              <div class="badge-item locked"><span class="badge-emoji">&#128081;</span><div class="badge-name">Top 10</div></div>
+              <div class="badge-item locked"><span class="badge-emoji">&#127381;</span><div class="badge-name">10 Projects</div></div>
+              <div class="badge-item locked"><span class="badge-emoji">&#9889;</span><div class="badge-name">Speed Coder</div></div>
+              <div class="badge-item locked"><span class="badge-emoji">&#129351;</span><div class="badge-name">Gold Rank</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Recent Activity & Leaderboard -->
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-header"><span class="card-title">&#128336; Recent Activity</span></div>
+        <div class="card-body">
+          <div class="timeline">
+            <div class="timeline-item"><div class="timeline-dot" style="background:#D1FAE5;color:#059669;">&#9989;</div><div class="timeline-content"><div class="timeline-title">Received certificate for "Mobile App UI Design"</div><div class="timeline-sub">PayU India &bull; +400 XP earned</div><div class="timeline-time">2 hours ago</div></div></div>
+            <div class="timeline-item"><div class="timeline-dot" style="background:#E0E7FF;color:#4F46E5;">&#128203;</div><div class="timeline-content"><div class="timeline-title">Applied to "IoT Smart Home System"</div><div class="timeline-sub">Hexaware Technologies &bull; Application submitted</div><div class="timeline-time">3 days ago</div></div></div>
+            <div class="timeline-item"><div class="timeline-dot" style="background:#FEF3C7;color:#D97706;">&#11088;</div><div class="timeline-content"><div class="timeline-title">Got 4.8/5 rating from mentor</div><div class="timeline-sub">REST API Development project &bull; Freshworks</div><div class="timeline-time">5 days ago</div></div></div>
+            <div class="timeline-item"><div class="timeline-dot" style="background:#FEE2E2;color:#DC2626;">&#128229;</div><div class="timeline-content"><div class="timeline-title">Submitted project files</div><div class="timeline-sub">Data Visualization Tool &bull; Zoho Corp</div><div class="timeline-time">1 week ago</div></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header"><span class="card-title">&#127942; College Leaderboard</span><span style="font-size:.8rem;color:var(--text-muted);">PSG Tech</span></div>
+        <div class="card-body">
+          <div class="leaderboard-item"><div class="leaderboard-rank rank-1">1</div><div style="font-size:1.5rem;">&#129351;</div><div class="leaderboard-info"><div class="leaderboard-name">Priya Nair</div><div class="leaderboard-sub">CSE-A &bull; 7 projects</div></div><div class="leaderboard-score" style="color:var(--student-primary);">2,840 XP</div></div>
+          <div class="leaderboard-item"><div class="leaderboard-rank rank-2">2</div><div style="font-size:1.5rem;">&#129352;</div><div class="leaderboard-info"><div class="leaderboard-name">Karthik S</div><div class="leaderboard-sub">IT-B &bull; 6 projects</div></div><div class="leaderboard-score" style="color:var(--student-primary);">2,420 XP</div></div>
+          <div class="leaderboard-item"><div class="leaderboard-rank rank-3">3</div><div style="font-size:1.5rem;">&#129353;</div><div class="leaderboard-info"><div class="leaderboard-name">Divya Mohan</div><div class="leaderboard-sub">ECE-A &bull; 5 projects</div></div><div class="leaderboard-score" style="color:var(--student-primary);">2,100 XP</div></div>
+          <div class="leaderboard-item" style="background:linear-gradient(135deg,#EEF2FF,#F5F3FF);border-color:rgba(79,70,229,0.2);"><div class="leaderboard-rank" style="color:var(--student-primary);">8</div><div style="font-size:1.5rem;">&#128081;</div><div class="leaderboard-info"><div class="leaderboard-name">Arjun Kumar (You)</div><div class="leaderboard-sub">CSE-B &bull; 4 projects</div></div><div class="leaderboard-score" style="color:var(--student-primary);">1,420 XP</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+<script src="../scripts/main.js"></script>
+</body>
+</html>

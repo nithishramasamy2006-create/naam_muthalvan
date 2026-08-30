@@ -1,0 +1,217 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>College Admin Dashboard — NM MicroLearn</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../styles/main.css">
+<style>
+.college-header{background:linear-gradient(135deg,#059669 0%,#0891B2 100%);border-radius:20px;padding:2rem;color:white;margin-bottom:1.5rem;display:flex;align-items:center;justify-content:space-between;position:relative;overflow:hidden;}
+.college-header::before{content:'';position:absolute;top:-40px;right:-40px;width:180px;height:180px;background:rgba(255,255,255,0.1);border-radius:50%;}
+.college-header::after{content:'';position:absolute;bottom:-60px;left:100px;width:150px;height:150px;background:rgba(255,255,255,0.06);border-radius:50%;}
+.dept-card{padding:1rem 1.25rem;background:var(--milk);border-radius:14px;border:1px solid var(--border);margin-bottom:.75rem;display:flex;align-items:center;justify-content:space-between;}
+.dept-name{font-size:.9rem;font-weight:600;}
+.dept-stats{display:flex;gap:1rem;}
+.dept-stat{text-align:center;}
+.dept-stat-val{font-family:'Outfit',sans-serif;font-size:1.1rem;font-weight:700;color:var(--college-primary);}
+.dept-stat-label{font-size:.7rem;color:var(--text-muted);}
+.credit-item{display:flex;align-items:center;gap:1rem;padding:.9rem 0;border-bottom:1px solid var(--border);}
+.credit-item:last-child{border:none;}
+.credit-student{font-size:.875rem;font-weight:600;}
+.credit-project{font-size:.75rem;color:var(--text-muted);}
+.credit-val{font-family:'Outfit',sans-serif;font-size:1.1rem;font-weight:700;color:var(--college-primary);}
+.approve-btn{padding:.4rem .9rem;background:var(--college-light);color:var(--college-primary);border:none;border-radius:50px;font-size:.75rem;font-weight:600;cursor:pointer;transition:var(--trans-base);}
+.approve-btn:hover{background:var(--college-primary);color:white;}
+.compliance-ring{width:100px;height:100px;margin:0 auto 1rem;}
+.compliance-ring svg{width:100%;height:100%;transform:rotate(-90deg);}
+.ring-bg{fill:none;stroke:#F3F4F6;stroke-width:8;}
+.ring-fg{fill:none;stroke:url(#ringGrad);stroke-width:8;stroke-linecap:round;stroke-dasharray:251;stroke-dashoffset:50;transition:stroke-dashoffset 1.5s ease;}
+.compliance-label{text-align:center;font-family:'Outfit',sans-serif;font-size:1.5rem;font-weight:800;color:var(--college-primary);}
+.compliance-sublabel{text-align:center;font-size:.75rem;color:var(--text-muted);}
+.report-btn{padding:.5rem 1.25rem;background:linear-gradient(135deg,var(--college-primary),var(--college-secondary));color:white;border:none;border-radius:50px;font-size:.82rem;font-weight:600;cursor:pointer;transition:var(--trans-base);}
+.report-btn:hover{transform:translateY(-2px);box-shadow:0 4px 15px rgba(5,150,105,0.3);}
+</style>
+</head>
+<body class="portal-body">
+<aside class="sidebar college-sidebar">
+  <div class="sidebar-header">
+    <div class="sidebar-logo"><svg width="20" height="20" viewBox="0 0 28 28" fill="none"><path d="M14 2L26 8V20L14 26L2 20V8L14 2Z" fill="white"/></svg></div>
+    <div><div class="sidebar-brand">NM MicroLearn</div><div class="sidebar-role">College Portal</div></div>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="sidebar-section-label">Main</div>
+    <div class="nav-item active"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg> Dashboard</div>
+    <div class="nav-item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg> Student Onboarding</div>
+    <div class="nav-item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg> Participation Analytics</div>
+    <div class="sidebar-section-label">Compliance</div>
+    <div class="nav-item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg> NM Credit Mapping <span class="nav-badge">12</span></div>
+    <div class="nav-item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/></svg> Generate Reports</div>
+    <div class="nav-item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> TNSDC Compliance</div>
+    <div class="sidebar-section-label">Departments</div>
+    <div class="nav-item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/></svg> Department View</div>
+    <div class="nav-item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> College Leaderboard</div>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="user-info">
+      <div class="user-avatar">DR</div>
+      <div><div class="user-name">Dr. Rajesh Kumar</div><div class="user-email">rajesh@psgtech.ac.in</div></div>
+    </div>
+    <a href="../index.html" style="display:flex;align-items:center;gap:.5rem;font-size:.8rem;color:var(--text-muted);padding:.5rem .75rem;margin-top:.25rem;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/></svg> Back to Home</a>
+  </div>
+</aside>
+<main class="main-content">
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="topbar-title">College Admin Dashboard</div>
+      <div class="topbar-sub">PSG College of Technology, Coimbatore &bull; Semester II 2025-26</div>
+    </div>
+    <div class="topbar-right">
+      <button class="report-btn">&#128196; Generate Report</button>
+      <div class="icon-btn notif-btn"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 01-3.46 0"/></svg><div class="notif-dot"></div></div>
+      <div class="user-avatar" style="background:linear-gradient(135deg,#059669,#0891B2);">DR</div>
+    </div>
+  </div>
+  <div class="page-content">
+    <div class="college-header">
+      <div style="position:relative;z-index:1;">
+        <div style="font-size:.8rem;opacity:.75;margin-bottom:.25rem;">PSG College of Technology</div>
+        <div style="font-family:'Outfit',sans-serif;font-size:1.4rem;font-weight:800;">Coimbatore, Tamil Nadu</div>
+        <div style="font-size:.85rem;opacity:.8;margin-top:.5rem;">NAAC Grade A++ &bull; 8 Departments Enrolled &bull; NM Partner Since 2023</div>
+      </div>
+      <div style="display:flex;gap:2.5rem;position:relative;z-index:1;text-align:center;">
+        <div><div style="font-family:'Outfit',sans-serif;font-size:2.2rem;font-weight:800;">842</div><div style="font-size:.75rem;opacity:.75;">Students Enrolled</div></div>
+        <div><div style="font-family:'Outfit',sans-serif;font-size:2.2rem;font-weight:800;">91%</div><div style="font-size:.75rem;opacity:.75;">Completion Rate</div></div>
+        <div><div style="font-family:'Outfit',sans-serif;font-size:2.2rem;font-weight:800;">1,240</div><div style="font-size:.75rem;opacity:.75;">Credits Earned</div></div>
+      </div>
+    </div>
+
+    <div class="stats-row">
+      <div class="stat-widget college-stat">
+        <div class="stat-widget-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></div>
+        <div><div class="stat-widget-val">842</div><div class="stat-widget-label">Enrolled Students</div><div class="stat-widget-change change-up">&#8593; 124 new this sem</div></div>
+      </div>
+      <div class="stat-widget college-stat">
+        <div class="stat-widget-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div>
+        <div><div class="stat-widget-val">91%</div><div class="stat-widget-label">Completion Rate</div><div class="stat-widget-change change-up">&#8593; 6% vs last sem</div></div>
+      </div>
+      <div class="stat-widget college-stat">
+        <div class="stat-widget-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"/></svg></div>
+        <div><div class="stat-widget-val">1,240</div><div class="stat-widget-label">NM Credits Earned</div><div class="stat-widget-change change-up">&#8593; 340 this month</div></div>
+      </div>
+      <div class="stat-widget college-stat">
+        <div class="stat-widget-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+        <div><div class="stat-widget-val">#3</div><div class="stat-widget-label">State Ranking</div><div class="stat-widget-change change-up">&#8593; 2 places this month</div></div>
+      </div>
+    </div>
+
+    <div class="grid-2" style="margin-bottom:1.25rem;">
+      <!-- Department Breakdown -->
+      <div class="card">
+        <div class="card-header"><span class="card-title">&#127979; Department Performance</span><button class="report-btn" style="font-size:.75rem;padding:.4rem 1rem;">Export</button></div>
+        <div class="card-body" style="padding:1rem 1.25rem;">
+          <div class="dept-card">
+            <div><div class="dept-name">Computer Science (CSE)</div><div style="font-size:.75rem;color:var(--text-muted);">320 students</div></div>
+            <div class="dept-stats"><div class="dept-stat"><div class="dept-stat-val">96%</div><div class="dept-stat-label">Completion</div></div><div class="dept-stat"><div class="dept-stat-val">480</div><div class="dept-stat-label">Credits</div></div></div>
+            <span class="badge badge-success">Excellent</span>
+          </div>
+          <div class="dept-card">
+            <div><div class="dept-name">Information Technology (IT)</div><div style="font-size:.75rem;color:var(--text-muted);">210 students</div></div>
+            <div class="dept-stats"><div class="dept-stat"><div class="dept-stat-val">93%</div><div class="dept-stat-label">Completion</div></div><div class="dept-stat"><div class="dept-stat-val">320</div><div class="dept-stat-label">Credits</div></div></div>
+            <span class="badge badge-success">Excellent</span>
+          </div>
+          <div class="dept-card">
+            <div><div class="dept-name">Electronics (ECE)</div><div style="font-size:.75rem;color:var(--text-muted);">180 students</div></div>
+            <div class="dept-stats"><div class="dept-stat"><div class="dept-stat-val">88%</div><div class="dept-stat-label">Completion</div></div><div class="dept-stat"><div class="dept-stat-val">240</div><div class="dept-stat-label">Credits</div></div></div>
+            <span class="badge badge-warning">Good</span>
+          </div>
+          <div class="dept-card">
+            <div><div class="dept-name">Mechanical (MECH)</div><div style="font-size:.75rem;color:var(--text-muted);">132 students</div></div>
+            <div class="dept-stats"><div class="dept-stat"><div class="dept-stat-val">72%</div><div class="dept-stat-label">Completion</div></div><div class="dept-stat"><div class="dept-stat-val">130</div><div class="dept-stat-label">Credits</div></div></div>
+            <span class="badge badge-warning">Needs Push</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- NM Credit Mapping Approvals -->
+      <div class="card">
+        <div class="card-header"><span class="card-title">&#9989; NM Credit Mapping</span><span class="badge badge-warning">12 Pending</span></div>
+        <div class="card-body">
+          <div class="credit-item">
+            <div style="flex:1;"><div class="credit-student">Arjun Kumar (CSE-B)</div><div class="credit-project">Mobile App UI Design &bull; PayU India</div></div>
+            <div class="credit-val">4 Credits</div>
+            <button class="approve-btn">Approve</button>
+          </div>
+          <div class="credit-item">
+            <div style="flex:1;"><div class="credit-student">Priya Nair (CSE-A)</div><div class="credit-project">ML Sentiment Analysis &bull; DataMinds</div></div>
+            <div class="credit-val">5 Credits</div>
+            <button class="approve-btn">Approve</button>
+          </div>
+          <div class="credit-item">
+            <div style="flex:1;"><div class="credit-student">Karthik Selvam (IT-B)</div><div class="credit-project">IoT Smart System &bull; Hexaware</div></div>
+            <div class="credit-val">6 Credits</div>
+            <button class="approve-btn">Approve</button>
+          </div>
+          <div class="credit-item">
+            <div style="flex:1;"><div class="credit-student">Divya Mohan (ECE-A)</div><div class="credit-project">Flutter Delivery App &bull; QuickLog</div></div>
+            <div class="credit-val">5 Credits</div>
+            <button class="approve-btn">Approve</button>
+          </div>
+          <div class="credit-item">
+            <div style="flex:1;"><div class="credit-student">Ramesh V (IT-A)</div><div class="credit-project">Django Hospital System &bull; HealthConnect</div></div>
+            <div class="credit-val">4 Credits</div>
+            <button class="approve-btn">Approve</button>
+          </div>
+          <div style="text-align:center;padding-top:.75rem;"><button class="report-btn" style="font-size:.8rem;padding:.5rem 1.25rem;">View All 12 Pending &#8594;</button></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Participation Chart + Compliance -->
+    <div class="grid-3">
+      <div class="card col-span-2">
+        <div class="card-header"><span class="card-title">&#128200; Monthly Participation Trend</span><span style="font-size:.8rem;color:var(--text-muted);">Jan–Aug 2026</span></div>
+        <div class="card-body">
+          <div style="display:flex;align-items:flex-end;gap:.75rem;height:140px;border-bottom:1px solid var(--border);padding-bottom:.5rem;margin-bottom:.5rem;">
+            <div style="display:flex;flex-direction:column;align-items:center;gap:.4rem;flex:1;"><div style="background:linear-gradient(180deg,#059669,#0891B2);border-radius:6px;width:100%;height:60px;"></div><div style="font-size:.7rem;color:var(--text-muted);">Jan</div></div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:.4rem;flex:1;"><div style="background:linear-gradient(180deg,#059669,#0891B2);border-radius:6px;width:100%;height:75px;"></div><div style="font-size:.7rem;color:var(--text-muted);">Feb</div></div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:.4rem;flex:1;"><div style="background:linear-gradient(180deg,#059669,#0891B2);border-radius:6px;width:100%;height:90px;"></div><div style="font-size:.7rem;color:var(--text-muted);">Mar</div></div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:.4rem;flex:1;"><div style="background:linear-gradient(180deg,#059669,#0891B2);border-radius:6px;width:100%;height:85px;"></div><div style="font-size:.7rem;color:var(--text-muted);">Apr</div></div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:.4rem;flex:1;"><div style="background:linear-gradient(180deg,#059669,#0891B2);border-radius:6px;width:100%;height:100px;"></div><div style="font-size:.7rem;color:var(--text-muted);">May</div></div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:.4rem;flex:1;"><div style="background:linear-gradient(180deg,#059669,#0891B2);border-radius:6px;width:100%;height:110px;"></div><div style="font-size:.7rem;color:var(--text-muted);">Jun</div></div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:.4rem;flex:1;"><div style="background:linear-gradient(180deg,#059669,#0891B2);border-radius:6px;width:100%;height:125px;"></div><div style="font-size:.7rem;color:var(--text-muted);">Jul</div></div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:.4rem;flex:1;"><div style="background:linear-gradient(180deg,#059669,#0891B2);border-radius:6px;width:100%;height:140px;opacity:0.85;"></div><div style="font-size:.7rem;color:#059669;font-weight:600;">Aug</div></div>
+          </div>
+          <div style="display:flex;gap:1.5rem;font-size:.8rem;color:var(--text-muted);">
+            <span><span style="display:inline-block;width:10px;height:10px;border-radius:2px;background:linear-gradient(135deg,#059669,#0891B2);margin-right:.3rem;"></span>Students participating</span>
+            <span>Peak: August (842 students)</span>
+            <span>Growth: +45% since January</span>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header"><span class="card-title">&#128202; TNSDC Compliance</span></div>
+        <div class="card-body" style="text-align:center;">
+          <div class="compliance-ring">
+            <svg viewBox="0 0 100 100">
+              <defs><linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#059669"/><stop offset="100%" stop-color="#0891B2"/></linearGradient></defs>
+              <circle class="ring-bg" cx="50" cy="50" r="40"/>
+              <circle class="ring-fg" cx="50" cy="50" r="40"/>
+            </svg>
+          </div>
+          <div class="compliance-label">80%</div>
+          <div class="compliance-sublabel">Compliance Score</div>
+          <div style="margin-top:1rem;font-size:.8rem;display:flex;flex-direction:column;gap:.5rem;">
+            <div style="display:flex;justify-content:space-between;"><span style="color:var(--text-muted);">Student Enrollment</span><span class="badge badge-success">&#9989;</span></div>
+            <div style="display:flex;justify-content:space-between;"><span style="color:var(--text-muted);">Credit Mapping</span><span class="badge badge-warning">80%</span></div>
+            <div style="display:flex;justify-content:space-between;"><span style="color:var(--text-muted);">Report Submission</span><span class="badge badge-success">&#9989;</span></div>
+            <div style="display:flex;justify-content:space-between;"><span style="color:var(--text-muted);">Industry Tie-ups</span><span class="badge badge-success">&#9989;</span></div>
+          </div>
+          <div style="margin-top:1rem;"><button class="report-btn" style="width:100%;">Submit TNSDC Report</button></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+<script src="../scripts/main.js"></script>
+</body>
+</html>
