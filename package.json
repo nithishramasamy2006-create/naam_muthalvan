@@ -1,0 +1,14 @@
+{
+  "name": "naam-muthalvan-root",
+  "version": "1.0.0",
+  "description": "Naan Mudhalvan MicroLearn Platform — Root scripts",
+  "private": true,
+  "scripts": {
+    "dev": "cd app && npm run dev",
+    "build": "cd app && npm run build",
+    "preview": "cd app && npm run preview",
+    "server": "cd server && npm start",
+    "seed": "cd server && npm run seed",
+    "dev:all": "start cmd /k \"cd app && npm run dev\" && start cmd /k \"cd server && npm start\""
+  }
+}
