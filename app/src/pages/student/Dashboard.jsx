@@ -2,6 +2,7 @@ import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
 import Sidebar from '../../components/Sidebar'
 import StatWidget from '../../components/StatWidget'
+import AIChatbot from '../../components/AIChatbot'
 import { getJobRecommendations, DEMO_STUDENT_PROFILE } from '../../lib/aiJobs'
 import { Award, TrendingUp, FolderOpen, Sparkles, ArrowRight, CheckCircle, Clock, Star, Zap, ChevronRight } from 'lucide-react'
 
@@ -226,6 +227,7 @@ export default function StudentDashboard() {
           </div>
         </div>
       </main>
+      <AIChatbot />
     </div>
   )
 }
