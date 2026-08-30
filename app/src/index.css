@@ -1,0 +1,57 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap');
+
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --milk: #F8F6F1;
+    --student: #4F46E5;
+    --company: #EA580C;
+    --college: #059669;
+    --admin: #7C3AED;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Inter', sans-serif;
+    background-color: #F8F6F1;
+    color: #1A1523;
+    -webkit-font-smoothing: antialiased;
+  }
+  h1,h2,h3,h4,h5 { font-family: 'Outfit', sans-serif; }
+}
+
+@layer utilities {
+  .font-outfit { font-family: 'Outfit', sans-serif; }
+  .text-milk { color: #F8F6F1; }
+  .bg-milk { background-color: #F8F6F1; }
+  .glow-indigo { box-shadow: 0 0 30px rgba(79,70,229,0.35); }
+  .glow-coral { box-shadow: 0 0 30px rgba(234,88,12,0.35); }
+  .glow-emerald { box-shadow: 0 0 30px rgba(5,150,105,0.35); }
+  .glow-purple { box-shadow: 0 0 30px rgba(124,58,237,0.35); }
+  .gradient-student { background: linear-gradient(135deg, #4F46E5, #7C3AED); }
+  .gradient-company { background: linear-gradient(135deg, #EA580C, #DC2626); }
+  .gradient-college { background: linear-gradient(135deg, #059669, #0891B2); }
+  .gradient-admin { background: linear-gradient(135deg, #7C3AED, #4F46E5); }
+  .gradient-dark { background: linear-gradient(135deg, #0F0A1E, #1A1523); }
+  .glass {
+    background: rgba(255,255,255,0.08);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255,255,255,0.12);
+  }
+  .glass-light {
+    background: rgba(255,255,255,0.7);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255,255,255,0.5);
+  }
+}
+
+/* Swiper overrides */
+.swiper-pagination-bullet { background: #4F46E5 !important; opacity: 0.35; }
+.swiper-pagination-bullet-active { background: #4F46E5 !important; opacity: 1; }
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 10px; }
+::-webkit-scrollbar-thumb:hover { background: #94A3B8; }
