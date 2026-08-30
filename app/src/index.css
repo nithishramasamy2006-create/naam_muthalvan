@@ -50,8 +50,56 @@
 .swiper-pagination-bullet { background: #4F46E5 !important; opacity: 0.35; }
 .swiper-pagination-bullet-active { background: #4F46E5 !important; opacity: 1; }
 
-/* Scrollbar */
-::-webkit-scrollbar { width: 6px; }
+/* Scrollbar — dark theme */
+::-webkit-scrollbar { width: 4px; height: 4px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 10px; }
-::-webkit-scrollbar-thumb:hover { background: #94A3B8; }
+::-webkit-scrollbar-thumb { background: rgba(139,92,246,0.3); border-radius: 10px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(139,92,246,0.55); }
+
+/* Chatbot scrollbar — extra thin */
+.scrollbar-thin::-webkit-scrollbar { width: 3px; }
+.scrollbar-track-transparent::-webkit-scrollbar-track { background: transparent; }
+.scrollbar-thumb-white\/10::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
+.scrollbar-none { scrollbar-width: none; -ms-overflow-style: none; }
+.scrollbar-none::-webkit-scrollbar { display: none; }
+
+/* Twinkling star keyframe */
+@keyframes twinkle {
+  0%, 100% { opacity: 0; transform: scale(0.5); }
+  50% { opacity: 1; transform: scale(1.4); }
+}
+.twinkle { animation: twinkle var(--dur, 2s) ease-in-out infinite; animation-delay: var(--delay, 0s); }
+
+/* Voice pulse animation */
+@keyframes voice-pulse {
+  0%, 100% { transform: scaleY(0.4); }
+  50% { transform: scaleY(1); }
+}
+.voice-bar { animation: voice-pulse 0.5s ease-in-out infinite; transform-origin: bottom; }
+
+/* Chatbot button star glow */
+@keyframes star-glow {
+  0%, 100% { box-shadow: 0 0 12px 2px rgba(139,92,246,0.35); }
+  50% { box-shadow: 0 0 28px 6px rgba(99,102,241,0.55), 0 0 50px 10px rgba(139,92,246,0.2); }
+}
+.chatbot-glow { animation: star-glow 2.5s ease-in-out infinite; }
+
+/* Orbital ring */
+@keyframes orbital { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+.orbital-ring { animation: orbital 4s linear infinite; }
+
+/* Glassmorphism card */
+.glass-card {
+  background: rgba(255,255,255,0.04);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
+/* Text gradient */
+.text-gradient {
+  background: linear-gradient(135deg, #a78bfa, #818cf8, #c084fc);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
