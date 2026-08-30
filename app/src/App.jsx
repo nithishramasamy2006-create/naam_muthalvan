@@ -36,6 +36,10 @@ import AdminColleges from './pages/admin/Colleges'
 import AdminCompanies from './pages/admin/Companies'
 import AdminUsers from './pages/admin/Users'
 import AdminSettings from './pages/admin/Settings'
+import AdminDisputes from './pages/admin/Disputes'
+// Student extra
+import StudentGrowth from './pages/student/Growth'
+import StudentSubmissions from './pages/student/Submissions'
 
 export default function App() {
   return (
@@ -78,6 +82,10 @@ export default function App() {
         <Route path="/admin/companies" element={<AdminCompanies />} />
         <Route path="/admin/users" element={<AdminUsers />} />
         <Route path="/admin/settings" element={<AdminSettings />} />
+        <Route path="/admin/disputes" element={<AdminDisputes />} />
+        {/* Student extra */}
+        <Route path="/student/growth" element={<StudentGrowth />} />
+        <Route path="/student/submissions" element={<StudentSubmissions />} />
       </Routes>
     </BrowserRouter>
   )

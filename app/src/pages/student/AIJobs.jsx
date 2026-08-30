@@ -1,336 +1,325 @@
-import { useState, useMemo } from 'react'
+/**
+ * AIJobs.jsx — Genuine AI-powered job recommendation page
+ *
+ * Two AI techniques used (honest description for your report/PPT):
+ * 1. Cosine Similarity — ranks job roles against student skill tags (ML, not LLM)
+ * 2. Google Gemini LLM — generates natural-language reasoning: WHY a role fits,
+ *    what the skill gap is, and what to learn next (LLM-powered)
+ */
+import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Swiper, SwiperSlide } from 'swiper/react'
-import { Navigation, Pagination } from 'swiper/modules'
-import 'swiper/css'
-import 'swiper/css/navigation'
-import 'swiper/css/pagination'
 import Sidebar from '../../components/Sidebar'
-import { getJobRecommendations, DEMO_STUDENT_PROFILE } from '../../lib/aiJobs'
-import { Sparkles, MapPin, Briefcase, TrendingUp, CheckCircle, XCircle, ArrowRight, Filter, Users, Trophy, Star, Zap } from 'lucide-react'
+import AIChatbot from '../../components/AIChatbot'
+import { Sparkles, TrendingUp, Target, BookOpen, ArrowRight, Loader, Star, Zap, Brain, ChevronDown } from 'lucide-react'
 
-const DOMAINS = ['All', 'Web Development', 'Data Science', 'Mobile Development', 'Cloud & DevOps', 'IoT & Embedded', 'Design', 'Cybersecurity']
+// ── Student profile (would come from API in production) ──
+const STUDENT = {
+  name: 'Arjun Kumar',
+  skills: ['React.js', 'JavaScript', 'HTML5', 'CSS3', 'REST API', 'Python', 'Figma', 'Node.js', 'Pandas', 'UI/UX', 'Prototyping', 'Responsive Design'],
+  certificates: ['Mobile UI/UX Redesign', 'E-Commerce React Dashboard', 'Python Web Scraper Pipeline'],
+  nmCredits: 24,
+  experience: 'Fresher',
+}
 
-function MatchRing({ score, size = 80 }) {
-  const r = (size / 2) - 8
-  const circumference = 2 * Math.PI * r
-  const dash = (score / 100) * circumference
-  const color = score >= 75 ? '#10B981' : score >= 50 ? '#F59E0B' : score >= 30 ? '#4F46E5' : '#94A3B8'
+// ── Job roles with skill requirements ──
+const JOB_ROLES = [
+  {
+    id: 1, title: 'Full Stack Developer', company: 'Zoho Corporation', location: 'Chennai', salary: '₹6–12 LPA',
+    requiredSkills: ['React.js', 'Node.js', 'JavaScript', 'REST API', 'MongoDB', 'HTML5', 'CSS3'],
+    img: 'https://images.unsplash.com/photo-1573804633927-bfcbcd909acd?w=400&q=70',
+    color: 'from-blue-500 to-indigo-600', domain: 'Web Development', openings: 3,
+  },
+  {
+    id: 2, title: 'UI/UX Designer', company: 'Freshworks', location: 'Chennai / Remote', salary: '₹5–9 LPA',
+    requiredSkills: ['Figma', 'UI/UX', 'Prototyping', 'Responsive Design', 'User Research', 'HTML5'],
+    img: 'https://images.unsplash.com/photo-1560472355-536de3962603?w=400&q=70',
+    color: 'from-pink-500 to-rose-600', domain: 'Design', openings: 2,
+  },
+  {
+    id: 3, title: 'Frontend React Developer', company: 'PayU India', location: 'Bengaluru / Remote', salary: '₹5–10 LPA',
+    requiredSkills: ['React.js', 'JavaScript', 'HTML5', 'CSS3', 'REST API', 'TypeScript'],
+    img: 'https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=400&q=70',
+    color: 'from-cyan-500 to-teal-600', domain: 'Frontend', openings: 4,
+  },
+  {
+    id: 4, title: 'Data Analyst', company: 'DataMinds Analytics', location: 'Coimbatore', salary: '₹4–8 LPA',
+    requiredSkills: ['Python', 'Pandas', 'SQL', 'Data Visualization', 'Excel', 'REST API'],
+    img: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400&q=70',
+    color: 'from-violet-500 to-purple-600', domain: 'Data Science', openings: 2,
+  },
+  {
+    id: 5, title: 'Product Designer', company: 'Hexaware Technologies', location: 'Chennai', salary: '₹6–11 LPA',
+    requiredSkills: ['Figma', 'UI/UX', 'Prototyping', 'User Research', 'Design Systems', 'CSS3'],
+    img: 'https://images.unsplash.com/photo-1497366216548-37526070297c?w=400&q=70',
+    color: 'from-amber-500 to-orange-600', domain: 'Design', openings: 1,
+  },
+  {
+    id: 6, title: 'Backend Node.js Developer', company: 'HealthConnect Systems', location: 'Madurai', salary: '₹5–9 LPA',
+    requiredSkills: ['Node.js', 'REST API', 'MongoDB', 'JavaScript', 'Docker', 'SQL'],
+    img: 'https://images.unsplash.com/photo-1627398242454-45a1465c2479?w=400&q=70',
+    color: 'from-emerald-500 to-teal-600', domain: 'Backend', openings: 2,
+  },
+]
 
+// ── TECHNIQUE 1: Cosine Similarity for job-skill matching ──
+// Converts skill lists to TF vectors and computes cosine similarity
+function cosineSimilarity(studentSkills, jobSkills) {
+  const allSkills = [...new Set([...studentSkills, ...jobSkills])].map(s => s.toLowerCase())
+  const studentVec = allSkills.map(s => (studentSkills.map(x => x.toLowerCase()).includes(s) ? 1 : 0))
+  const jobVec     = allSkills.map(s => (jobSkills.map(x => x.toLowerCase()).includes(s) ? 1 : 0))
+  const dot    = studentVec.reduce((sum, v, i) => sum + v * jobVec[i], 0)
+  const magS   = Math.sqrt(studentVec.reduce((s, v) => s + v * v, 0))
+  const magJ   = Math.sqrt(jobVec.reduce((s, v) => s + v * v, 0))
+  return magS && magJ ? dot / (magS * magJ) : 0
+}
+
+function rankJobs(student, jobs) {
+  return jobs
+    .map(job => {
+      const score     = cosineSimilarity(student.skills, job.requiredSkills)
+      const matched   = job.requiredSkills.filter(s => student.skills.map(x => x.toLowerCase()).includes(s.toLowerCase()))
+      const missing   = job.requiredSkills.filter(s => !student.skills.map(x => x.toLowerCase()).includes(s.toLowerCase()))
+      const matchPct  = Math.round(score * 100)
+      return { ...job, matchScore: matchPct, matchedSkills: matched, missingSkills: missing }
+    })
+    .sort((a, b) => b.matchScore - a.matchScore)
+}
+
+// ── TECHNIQUE 2: Gemini LLM for reasoning ──
+const GEMINI_API_KEY = import.meta.env.VITE_GEMINI_API_KEY
+const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`
+
+async function getJobReasoning(student, job) {
+  const prompt = `You are a career counselor for Tamil Nadu students on the Naan Mudhalvan (NM) platform.
+
+Student profile:
+- Name: ${student.name}
+- Skills: ${student.skills.join(', ')}
+- Certificates: ${student.certificates.join(', ')}
+- NM Credits: ${student.nmCredits} (Silver Level)
+
+Job role: ${job.title} at ${job.company}
+Required skills: ${job.requiredSkills.join(', ')}
+Skill match score: ${job.matchScore}%
+Student already has: ${job.matchedSkills.join(', ')}
+Student is missing: ${job.missingSkills.join(', ')}
+
+Write a short (3-4 sentences), encouraging career advice for this student about this role. Include:
+1. Why this role fits them specifically
+2. What their strongest matching skills are
+3. One actionable step to close the top skill gap
+Keep it personal, specific, and motivating. No bullet points.`
+
+  const isKeySet = GEMINI_API_KEY && !GEMINI_API_KEY.includes('REPLACE')
+
+  if (!isKeySet) {
+    const gaps = job.missingSkills.slice(0, 2).join(' and ')
+    return `Based on your ${job.matchScore}% skill match, ${job.title} at ${job.company} is ${job.matchScore > 75 ? 'an excellent' : 'a good'} fit for you. Your strong foundation in ${job.matchedSkills.slice(0, 3).join(', ')} makes you a competitive candidate. ${gaps ? `To maximize your chances, focus on building ${gaps} skills through an NM micro-project. ` : ''}Add your VITE_GEMINI_API_KEY in .env for real AI-powered reasoning!`
+  }
+
+  const res = await fetch(GEMINI_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      contents: [{ role: 'user', parts: [{ text: prompt }] }],
+      generationConfig: { maxOutputTokens: 200, temperature: 0.8 }
+    })
+  })
+  const data = await res.json()
+  return data.candidates?.[0]?.content?.parts?.[0]?.text || 'AI reasoning unavailable.'
+}
+
+// ── Match score ring ──
+function MatchRing({ score }) {
+  const color = score >= 80 ? '#10b981' : score >= 60 ? '#f59e0b' : '#ef4444'
+  const strokeDash = (score / 100) * 100
   return (
-    <div className="relative flex-shrink-0" style={{ width: size, height: size }}>
-      <svg width={size} height={size} style={{ transform: 'rotate(-90deg)' }}>
-        <circle cx={size/2} cy={size/2} r={r} fill="none" stroke="rgba(255,255,255,0.08)" strokeWidth="6" />
-        <motion.circle
-          cx={size/2} cy={size/2} r={r} fill="none" stroke={color} strokeWidth="6"
-          strokeLinecap="round"
-          initial={{ strokeDashoffset: circumference }}
-          animate={{ strokeDashoffset: circumference - dash }}
-          transition={{ duration: 1.2, delay: 0.3, ease: 'easeOut' }}
-          style={{ strokeDasharray: circumference }}
-        />
+    <div className="relative w-16 h-16 flex-shrink-0">
+      <svg className="w-full h-full -rotate-90" viewBox="0 0 100 100">
+        <circle cx="50" cy="50" r="40" fill="none" stroke="rgba(255,255,255,0.08)" strokeWidth="10" />
+        <motion.circle cx="50" cy="50" r="40" fill="none" stroke={color} strokeWidth="10"
+          strokeLinecap="round" pathLength="100"
+          initial={{ strokeDasharray: '0 100' }}
+          animate={{ strokeDasharray: `${strokeDash} 100` }}
+          transition={{ duration: 1, ease: 'easeOut', delay: 0.2 }} />
       </svg>
-      <div className="absolute inset-0 flex flex-col items-center justify-center">
-        <span className="font-outfit font-black text-white text-sm leading-none">{score}%</span>
-        <span className="text-white/30 text-[9px]">match</span>
+      <div className="absolute inset-0 flex items-center justify-center">
+        <span className="font-outfit font-black text-sm text-white">{score}%</span>
       </div>
     </div>
   )
 }
 
-function SkillPill({ skill, matched }) {
-  return (
-    <span className={`flex items-center gap-1 text-xs font-medium px-2.5 py-1 rounded-full border
-      ${matched
-        ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/25'
-        : 'bg-rose-500/10 text-rose-400 border-rose-500/25'}`}>
-      {matched ? <CheckCircle size={10} /> : <XCircle size={10} />}
-      {skill}
-    </span>
-  )
-}
-
-function JobCard({ job, index }) {
-  const [expanded, setExpanded] = useState(false)
-
-  const scoreBg = job.score >= 75 ? 'from-emerald-900/40 to-emerald-900/10 border-emerald-500/20'
-    : job.score >= 50 ? 'from-amber-900/30 to-amber-900/10 border-amber-500/20'
-    : 'from-indigo-900/30 to-indigo-900/10 border-indigo-500/15'
-
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 30 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5, delay: index * 0.07, ease: [0.4, 0, 0.2, 1] }}
-      whileHover={{ y: -4, transition: { duration: 0.2 } }}
-      className={`relative rounded-2xl border bg-gradient-to-br ${scoreBg} backdrop-blur-sm overflow-hidden cursor-pointer`}
-      onClick={() => setExpanded(!expanded)}
-    >
-      {/* Top accent line based on match */}
-      <div className={`h-0.5 w-full bg-gradient-to-r ${job.color}`} />
-
-      <div className="p-5">
-        <div className="flex items-start gap-4">
-          {/* Logo */}
-          <div className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${job.color} flex items-center justify-center text-2xl shadow-lg flex-shrink-0`}>
-            {job.logo}
-          </div>
-
-          {/* Info */}
-          <div className="flex-1 min-w-0">
-            <div className="flex items-start justify-between gap-3 mb-1">
-              <div>
-                <h3 className="font-outfit font-bold text-white text-base leading-tight">{job.title}</h3>
-                <p className="text-white/50 text-sm">{job.company}</p>
-              </div>
-              <MatchRing score={job.score} size={64} />
-            </div>
-
-            <div className="flex flex-wrap gap-2 text-xs text-white/40 mb-3">
-              <span className="flex items-center gap-1"><MapPin size={10} />{job.location}</span>
-              <span className="flex items-center gap-1"><Briefcase size={10} />{job.type}</span>
-              <span className="flex items-center gap-1"><Users size={10} />{job.openings} openings</span>
-              <span className="flex items-center gap-1 text-emerald-400 font-medium">₹{job.salaryMin}–{job.salaryMax} LPA</span>
-            </div>
-
-            {/* AI Insight */}
-            <div className="flex items-start gap-2 bg-white/5 border border-white/8 rounded-xl p-3 mb-3">
-              <Sparkles size={13} className="text-violet-400 flex-shrink-0 mt-0.5" />
-              <p className="text-white/60 text-xs leading-relaxed">{job.insight}</p>
-            </div>
-
-            {/* Skill pills - preview */}
-            <div className="flex flex-wrap gap-1.5">
-              {job.matched.slice(0, 3).map(s => <SkillPill key={s} skill={s} matched />)}
-              {job.missing.slice(0, 2).map(s => <SkillPill key={s} skill={s} matched={false} />)}
-              {(job.matched.length + job.missing.length > 5) && (
-                <span className="text-xs text-white/30 px-2 py-1">+{job.matched.length + job.missing.length - 5} more</span>
-              )}
-            </div>
-          </div>
-        </div>
-
-        {/* Expanded section */}
-        <AnimatePresence>
-          {expanded && (
-            <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }}
-              transition={{ duration: 0.3 }} className="overflow-hidden">
-              <div className="mt-4 pt-4 border-t border-white/8">
-                <div className="grid grid-cols-2 gap-4 mb-4">
-                  <div>
-                    <div className="text-white/40 text-xs font-semibold uppercase tracking-wide mb-2">Required Skills</div>
-                    <div className="flex flex-wrap gap-1.5">
-                      {job.matched.map(s => <SkillPill key={s} skill={s} matched />)}
-                      {job.missing.map(s => <SkillPill key={s} skill={s} matched={false} />)}
-                    </div>
-                  </div>
-                  <div>
-                    <div className="text-white/40 text-xs font-semibold uppercase tracking-wide mb-2">Nice to Have</div>
-                    <div className="flex flex-wrap gap-1.5">
-                      {job.niceMatched.map(s => <SkillPill key={s} skill={s} matched />)}
-                      {(job.niceToHave || []).filter(s => !job.niceMatched.includes(s)).map(s => (
-                        <span key={s} className="text-xs font-medium px-2.5 py-1 rounded-full border bg-white/5 text-white/30 border-white/10">{s}</span>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-
-                <div className="bg-amber-500/10 border border-amber-500/20 rounded-xl p-3 mb-4 flex items-start gap-2">
-                  <Zap size={13} className="text-amber-400 flex-shrink-0 mt-0.5" />
-                  <div>
-                    <div className="text-amber-300 text-xs font-semibold mb-0.5">Bridge Suggestion</div>
-                    <p className="text-white/55 text-xs">{job.bridgeProject}</p>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-3">
-                  <div className="flex items-center gap-1.5 text-xs text-white/40">
-                    <Trophy size={12} className="text-amber-400" />
-                    {job.nmCreditsRequired} NM Credits required
-                    {job.creditsOk ? <span className="text-emerald-400 ml-1">✓ You qualify</span> : <span className="text-rose-400 ml-1">You need {job.nmCreditsRequired - DEMO_STUDENT_PROFILE.nmCredits} more credits</span>}
-                  </div>
-                  <motion.a href="#" whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}
-                    className={`ml-auto flex items-center gap-1.5 text-xs font-bold px-4 py-2 rounded-xl bg-gradient-to-r ${job.color} text-white shadow-lg`}
-                    onClick={e => e.stopPropagation()}>
-                    Apply Now <ArrowRight size={12} />
-                  </motion.a>
-                </div>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-
-        {/* Expand hint */}
-        <div className="text-center mt-3">
-          <span className="text-white/20 text-[10px]">{expanded ? '▲ collapse' : '▼ click for details'}</span>
-        </div>
-      </div>
-    </motion.div>
-  )
-}
-
 export default function AIJobs() {
-  const [domain, setDomain] = useState('All')
-  const [minMatch, setMinMatch] = useState(0)
+  const [rankedJobs, setRankedJobs] = useState([])
+  const [reasoning, setReasoning] = useState({}) // { jobId: text }
+  const [loadingReason, setLoadingReason] = useState({})
+  const [expanded, setExpanded] = useState(null)
 
-  const recommendations = useMemo(() => getJobRecommendations(DEMO_STUDENT_PROFILE), [])
-  const filtered = useMemo(() => recommendations.filter(j =>
-    (domain === 'All' || j.domain === domain) && j.score >= minMatch
-  ), [recommendations, domain, minMatch])
+  useEffect(() => {
+    setRankedJobs(rankJobs(STUDENT, JOB_ROLES))
+  }, [])
 
-  const topJob = recommendations[0]
-  const avgScore = Math.round(recommendations.reduce((s, j) => s + j.score, 0) / recommendations.length)
+  const toggleExpand = async (job) => {
+    if (expanded === job.id) { setExpanded(null); return }
+    setExpanded(job.id)
+    if (!reasoning[job.id]) {
+      setLoadingReason(p => ({ ...p, [job.id]: true }))
+      const text = await getJobReasoning(STUDENT, job)
+      setReasoning(p => ({ ...p, [job.id]: text }))
+      setLoadingReason(p => ({ ...p, [job.id]: false }))
+    }
+  }
 
   return (
     <div className="flex h-screen overflow-hidden bg-[#06030F]">
       <Sidebar portal="student" />
-
       <main className="flex-1 overflow-y-auto">
-        {/* Header */}
         <div className="sticky top-0 z-10 bg-[#06030F]/90 backdrop-blur-xl border-b border-white/5 px-8 py-5">
-          <div className="flex items-center justify-between">
-            <div>
-              <div className="flex items-center gap-2 mb-1">
-                <div className="w-6 h-6 rounded-lg bg-gradient-to-br from-violet-500 to-indigo-600 flex items-center justify-center">
-                  <Sparkles size={12} className="text-white" />
-                </div>
-                <span className="text-violet-400 text-xs font-bold uppercase tracking-widest">AI Powered</span>
-              </div>
-              <h1 className="font-outfit font-black text-2xl text-white">Job Recommendations</h1>
-              <p className="text-white/35 text-sm">Matched against your 3 certificates &bull; {DEMO_STUDENT_PROFILE.nmCredits} NM Credits &bull; {DEMO_STUDENT_PROFILE.skills.length} skills</p>
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-violet-500 to-indigo-600 flex items-center justify-center">
+              <Brain size={18} className="text-white" />
             </div>
-            <div className="flex items-center gap-3">
-              <div className="text-right">
-                <div className="font-outfit font-black text-3xl text-white">{recommendations.length}</div>
-                <div className="text-white/30 text-xs">job matches</div>
-              </div>
+            <div>
+              <h1 className="font-outfit font-black text-2xl text-white">AI Job Recommendations</h1>
+              <p className="text-white/35 text-sm">
+                <span className="text-violet-400 font-semibold">Cosine similarity</span> ranking ·{' '}
+                <span className="text-indigo-400 font-semibold">Gemini LLM</span> reasoning · Based on your 12 verified skills
+              </p>
             </div>
           </div>
         </div>
 
         <div className="p-8">
-          {/* Top match hero card */}
-          {topJob && (
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}
-              className="relative mb-8 p-6 rounded-3xl border border-white/10 overflow-hidden"
-              style={{ background: 'linear-gradient(135deg, rgba(99,102,241,0.15), rgba(124,58,237,0.08))' }}>
-              <div className="absolute inset-0 bg-gradient-to-br from-indigo-600/5 to-violet-600/5" />
-              <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-indigo-500/50 to-transparent" />
+          {/* Technique explanation banner */}
+          <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}
+            className="mb-6 p-4 rounded-2xl bg-gradient-to-r from-violet-900/30 to-indigo-900/20 border border-violet-500/20 flex items-start gap-3">
+            <Sparkles size={18} className="text-violet-400 flex-shrink-0 mt-0.5" />
+            <div>
+              <p className="text-violet-300 text-sm font-semibold">Genuine AI — Two techniques at work</p>
+              <p className="text-violet-300/60 text-xs mt-0.5">
+                <strong className="text-violet-400">① Cosine Similarity (ML):</strong> your skill vector vs each job's skill vector → match % &nbsp;|&nbsp;
+                <strong className="text-indigo-400">② Gemini LLM:</strong> click "Get AI Reasoning" to get a personalised career explanation
+              </p>
+            </div>
+          </motion.div>
 
-              <div className="relative z-10 flex items-center gap-6">
-                <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${topJob.color} flex items-center justify-center text-3xl shadow-2xl`}>
-                  {topJob.logo}
-                </div>
-                <div className="flex-1">
-                  <div className="flex items-center gap-2 mb-1">
-                    <span className="text-xs font-bold text-amber-400 uppercase tracking-wide">🏆 Your Best Match</span>
+          {/* Student skill snapshot */}
+          <div className="mb-6 p-4 rounded-2xl bg-white/[0.03] border border-white/8 flex items-start gap-4">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center font-outfit font-black text-white text-sm flex-shrink-0">AK</div>
+            <div className="flex-1">
+              <p className="text-white font-semibold text-sm mb-2">Your Skill Profile — Arjun Kumar</p>
+              <div className="flex flex-wrap gap-1.5">
+                {STUDENT.skills.map(s => (
+                  <span key={s} className="text-[10px] font-semibold text-indigo-300 bg-indigo-500/10 border border-indigo-500/20 px-2 py-0.5 rounded-full">{s}</span>
+                ))}
+              </div>
+            </div>
+            <div className="text-right flex-shrink-0">
+              <p className="text-amber-400 font-black text-xl">{STUDENT.nmCredits}</p>
+              <p className="text-white/30 text-[10px]">NM Credits · Silver</p>
+            </div>
+          </div>
+
+          {/* Ranked Job Cards */}
+          <div className="flex flex-col gap-4">
+            {rankedJobs.map((job, i) => (
+              <motion.div key={job.id} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.08 }}
+                className="rounded-3xl border border-white/8 bg-white/[0.025] overflow-hidden">
+                {/* Main row */}
+                <div className="flex items-center gap-4 p-5">
+                  {/* Rank badge */}
+                  <div className={`w-7 h-7 rounded-xl flex items-center justify-center font-outfit font-black text-sm flex-shrink-0 ${i === 0 ? 'bg-amber-400 text-black' : i === 1 ? 'bg-slate-300 text-black' : i === 2 ? 'bg-orange-600 text-white' : 'bg-white/8 text-white/40'}`}>
+                    {i + 1}
                   </div>
-                  <h2 className="font-outfit font-black text-xl text-white mb-1">{topJob.title} at {topJob.company}</h2>
-                  <p className="text-white/45 text-sm">{topJob.insight}</p>
-                </div>
-                <div className="text-right flex-shrink-0">
-                  <MatchRing score={topJob.score} size={90} />
-                </div>
-              </div>
 
-              {/* Progress bar */}
-              <div className="relative z-10 mt-4">
-                <div className="flex justify-between text-xs text-white/30 mb-1.5">
-                  <span>Skill Match Progress</span>
-                  <span>{topJob.matched.length}/{topJob.requiredSkills.length} required skills met</span>
-                </div>
-                <div className="h-2 bg-white/5 rounded-full overflow-hidden">
-                  <motion.div className={`h-full bg-gradient-to-r ${topJob.color} rounded-full`}
-                    initial={{ width: 0 }} animate={{ width: `${topJob.score}%` }}
-                    transition={{ duration: 1.2, ease: 'easeOut' }} />
-                </div>
-              </div>
-            </motion.div>
-          )}
+                  {/* Job image */}
+                  <div className="relative w-16 h-16 rounded-2xl overflow-hidden flex-shrink-0">
+                    <img src={job.img} alt={job.title} className="w-full h-full object-cover" />
+                    <div className={`absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r ${job.color}`} />
+                  </div>
 
-          {/* Summary stats */}
-          <div className="grid grid-cols-3 gap-4 mb-8">
-            {[
-              { label: 'Avg Match Score', value: `${avgScore}%`, icon: TrendingUp, color: 'text-indigo-400' },
-              { label: 'Roles You Qualify', value: recommendations.filter(j => j.score >= 50).length, icon: CheckCircle, color: 'text-emerald-400' },
-              { label: 'Skills Gaps to Close', value: [...new Set(recommendations.flatMap(j => j.missing))].length, icon: Star, color: 'text-amber-400' },
-            ].map((s, i) => (
-              <motion.div key={s.label} initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.1 + 0.3, duration: 0.5 }}
-                className="p-4 rounded-2xl bg-white/3 border border-white/8 flex items-center gap-4">
-                <s.icon size={22} className={s.color} />
-                <div>
-                  <div className={`font-outfit font-black text-2xl ${s.color}`}>{s.value}</div>
-                  <div className="text-white/35 text-xs">{s.label}</div>
+                  {/* Info */}
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2 mb-0.5">
+                      <h3 className="font-outfit font-bold text-white text-base">{job.title}</h3>
+                      {i === 0 && <span className="text-[9px] bg-amber-500/20 text-amber-300 border border-amber-500/25 px-2 py-0.5 rounded-full font-bold">Best Match</span>}
+                    </div>
+                    <p className="text-white/40 text-sm">{job.company} · {job.location}</p>
+                    <div className="flex items-center gap-3 mt-1.5 text-xs">
+                      <span className="text-emerald-400 font-semibold">{job.salary}</span>
+                      <span className="text-white/25">·</span>
+                      <span className="text-white/35">{job.openings} openings</span>
+                      <span className="text-white/25">·</span>
+                      <span className="text-indigo-400">{job.domain}</span>
+                    </div>
+                  </div>
+
+                  {/* Match ring */}
+                  <MatchRing score={job.matchScore} />
+
+                  {/* Expand button */}
+                  <motion.button whileHover={{ scale: 1.05 }} onClick={() => toggleExpand(job)}
+                    className="flex items-center gap-1.5 text-xs font-bold px-3 py-2 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 text-white shadow-lg shadow-violet-500/20 flex-shrink-0">
+                    <Zap size={11} />
+                    AI Reason
+                    <ChevronDown size={11} className={`transition-transform ${expanded === job.id ? 'rotate-180' : ''}`} />
+                  </motion.button>
                 </div>
+
+                {/* Skill match / gap row */}
+                <div className="px-5 pb-3 flex gap-4">
+                  <div className="flex-1">
+                    <p className="text-emerald-400 text-[10px] font-bold uppercase tracking-widest mb-1.5">You have ({job.matchedSkills.length})</p>
+                    <div className="flex flex-wrap gap-1">
+                      {job.matchedSkills.map(s => <span key={s} className="text-[10px] bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-2 py-0.5 rounded-full">{s}</span>)}
+                    </div>
+                  </div>
+                  {job.missingSkills.length > 0 && (
+                    <div className="flex-1">
+                      <p className="text-red-400 text-[10px] font-bold uppercase tracking-widest mb-1.5">You need ({job.missingSkills.length})</p>
+                      <div className="flex flex-wrap gap-1">
+                        {job.missingSkills.map(s => <span key={s} className="text-[10px] bg-red-500/10 text-red-400 border border-red-500/20 px-2 py-0.5 rounded-full">{s}</span>)}
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                {/* LLM Reasoning panel */}
+                <AnimatePresence>
+                  {expanded === job.id && (
+                    <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.25 }}
+                      className="border-t border-white/8 overflow-hidden">
+                      <div className="p-5">
+                        <div className="flex items-center gap-2 mb-3">
+                          <div className="w-6 h-6 rounded-lg bg-gradient-to-br from-violet-500 to-indigo-600 flex items-center justify-center flex-shrink-0">
+                            <Brain size={12} className="text-white" />
+                          </div>
+                          <p className="text-violet-400 text-xs font-bold uppercase tracking-widest">Gemini AI Career Reasoning</p>
+                        </div>
+                        {loadingReason[job.id] ? (
+                          <div className="flex items-center gap-2 text-white/40 text-sm">
+                            <Loader size={14} className="animate-spin" />
+                            <span>Gemini is analysing your profile…</span>
+                          </div>
+                        ) : (
+                          <p className="text-white/70 text-sm leading-relaxed">{reasoning[job.id]}</p>
+                        )}
+                        <motion.button whileHover={{ scale: 1.03 }}
+                          className="mt-4 flex items-center gap-2 text-xs font-bold px-4 py-2 rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 text-white shadow-lg">
+                          <ArrowRight size={12} /> Apply for this Role
+                        </motion.button>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </motion.div>
             ))}
           </div>
-
-          {/* Filters */}
-          <div className="flex flex-wrap items-center gap-3 mb-6">
-            <Filter size={14} className="text-white/30" />
-            <div className="flex flex-wrap gap-2">
-              {DOMAINS.map(d => (
-                <button key={d} onClick={() => setDomain(d)}
-                  className={`text-xs font-semibold px-3 py-1.5 rounded-full border transition-all duration-200
-                    ${domain === d ? 'bg-indigo-600 border-indigo-500 text-white shadow-lg shadow-indigo-500/25' : 'border-white/10 text-white/40 hover:border-white/20 hover:text-white/60'}`}>
-                  {d}
-                </button>
-              ))}
-            </div>
-            <div className="ml-auto flex items-center gap-3 text-xs text-white/40">
-              <span>Min match:</span>
-              {[0, 30, 50, 75].map(v => (
-                <button key={v} onClick={() => setMinMatch(v)}
-                  className={`px-2 py-1 rounded-lg border transition-all ${minMatch === v ? 'border-violet-500 text-violet-300 bg-violet-500/15' : 'border-white/10 hover:border-white/20'}`}>
-                  {v === 0 ? 'All' : `${v}%+`}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* Job cards */}
-          <div className="flex flex-col gap-4">
-            <AnimatePresence mode="popLayout">
-              {filtered.length === 0 ? (
-                <motion.div key="empty" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-                  className="text-center py-16 text-white/30">
-                  <div className="text-5xl mb-4">🔍</div>
-                  <div className="font-outfit font-bold text-lg text-white/50">No matches for this filter</div>
-                  <div className="text-sm mt-1">Try lowering the minimum match score</div>
-                </motion.div>
-              ) : filtered.map((job, i) => (
-                <JobCard key={job.id} job={job} index={i} />
-              ))}
-            </AnimatePresence>
-          </div>
-
-          {/* Swiper - Quick job cards carousel at bottom */}
-          <div className="mt-12">
-            <h2 className="font-outfit font-bold text-white text-lg mb-4">🎯 Trending Roles in Tamil Nadu</h2>
-            <Swiper modules={[Navigation, Pagination]} slidesPerView={1} spaceBetween={16}
-              breakpoints={{ 640: { slidesPerView: 2 }, 1024: { slidesPerView: 3 } }}
-              pagination={{ clickable: true }} className="pb-10">
-              {recommendations.slice(0, 6).map(job => (
-                <SwiperSlide key={job.id}>
-                  <motion.div whileHover={{ y: -4 }} className={`p-4 rounded-2xl border bg-gradient-to-br ${job.color.replace('from-', 'from-').replace(' to-', '/20 to-').replace(/-\d+/g, m => m.replace(/\d+/, n => Math.max(5, parseInt(n) - 35)))} border-white/10`}>
-                    <div className="flex items-center justify-between mb-3">
-                      <span className="text-2xl">{job.logo}</span>
-                      <span className={`font-outfit font-black text-lg ${job.score >= 75 ? 'text-emerald-400' : job.score >= 50 ? 'text-amber-400' : 'text-indigo-400'}`}>{job.score}%</span>
-                    </div>
-                    <h4 className="font-outfit font-bold text-white text-sm mb-1">{job.title}</h4>
-                    <p className="text-white/40 text-xs mb-3">{job.company} · ₹{job.salaryMin}–{job.salaryMax} LPA</p>
-                    <div className="h-1 bg-white/10 rounded-full overflow-hidden">
-                      <div className={`h-full bg-gradient-to-r ${job.color} rounded-full`} style={{ width: `${job.score}%` }} />
-                    </div>
-                  </motion.div>
-                </SwiperSlide>
-              ))}
-            </Swiper>
-          </div>
         </div>
       </main>
+      <AIChatbot />
     </div>
   )
 }
