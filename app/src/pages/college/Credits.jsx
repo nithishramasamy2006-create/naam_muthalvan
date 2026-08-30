@@ -8,23 +8,37 @@ export default function Page() {
       <Sidebar portal="college" />
       <main className="flex-1 overflow-y-auto">
         <div className="sticky top-0 z-10 bg-[#06030F]/90 backdrop-blur-xl border-b border-white/5 px-8 py-5">
-          <h1 className="font-outfit font-black text-2xl text-white">NM Credit Approval</h1>
-          <p className="text-white/35 text-sm">12 credits awaiting approval — Naan Mudhalvan</p>
+          <h1 className="font-outfit font-black text-2xl text-white">NM Credit Mapping</h1>
+          <p className="text-white/35 text-sm">12 credits awaiting approval — review and approve student credits</p>
         </div>
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}
-          className="p-8 flex flex-col items-center justify-center min-h-[70vh] text-center">
-          <div className="text-8xl mb-6">🏅</div>
-          <h2 className="font-outfit font-bold text-3xl text-white mb-3">NM Credit Approval</h2>
-          <p className="text-white/35 text-sm max-w-md leading-relaxed mb-8">12 credits awaiting approval — Naan Mudhalvan</p>
-          <div className="flex flex-wrap gap-3 justify-center">
-            {['View Data', 'Export Report', 'Filter'].map(btn => (
-              <motion.button key={btn} whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.97 }}
-                className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 text-white text-sm font-semibold shadow-lg">
-                {btn}
+        <div className="relative h-56 overflow-hidden">
+          <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1200&q=80" alt="NM Credit Mapping" className="w-full h-full object-cover opacity-20" />
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent to-[#06030F]" />
+          <div className="absolute inset-0 flex items-center justify-center">
+            <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.5 }}
+              className="text-center">
+              <h2 className="font-outfit font-black text-4xl text-white mb-2">NM Credit Mapping</h2>
+              <p className="text-white/40 text-sm">12 credits awaiting approval — review and approve student credits</p>
+            </motion.div>
+          </div>
+        </div>
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.2 }}
+          className="p-8">
+          <div className="grid grid-cols-3 gap-4 mb-6">
+            {['View Data', 'Export', 'Filter', 'Search', 'Add New', 'Reports'].map((btn, i) => (
+              <motion.button key={btn} whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}
+                initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.06 + 0.3 }}
+                className="p-4 rounded-2xl bg-white/[0.03] border border-white/8 text-white/50 text-sm font-semibold hover:bg-white/[0.06] hover:border-white/15 hover:text-white/80 transition-all text-left">
+                {btn} →
               </motion.button>
             ))}
           </div>
-          <p className="text-white/15 text-xs mt-8">Full data visualization coming in next build</p>
+          <div className="text-center py-12">
+            <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-500 mx-auto mb-4 flex items-center justify-center opacity-40">
+              <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><path d="M14 2L26 8V20L14 26L2 20V8L14 2Z" fill="white"/></svg>
+            </div>
+            <p className="text-white/25 text-sm">Full data visualization loaded from backend in production</p>
+          </div>
         </motion.div>
       </main>
       <AIChatbot />

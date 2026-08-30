@@ -8,17 +8,17 @@ export default function Page() {
       <Sidebar portal="college" />
       <main className="flex-1 overflow-y-auto">
         <div className="sticky top-0 z-10 bg-[#06030F]/90 backdrop-blur-xl border-b border-white/5 px-8 py-5">
-          <h1 className="font-outfit font-black text-2xl text-white">Participation Analytics</h1>
-          <p className="text-white/35 text-sm">Department-wise completion rates, credit distribution, trends</p>
+          <h1 className="font-outfit font-black text-2xl text-white">Student Onboarding</h1>
+          <p className="text-white/35 text-sm">Enroll and register students on the NM MicroLearn platform</p>
         </div>
         <div className="relative h-56 overflow-hidden">
-          <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1200&q=80" alt="Participation Analytics" className="w-full h-full object-cover opacity-20" />
+          <img src="https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=1200&q=80" alt="Student Onboarding" className="w-full h-full object-cover opacity-20" />
           <div className="absolute inset-0 bg-gradient-to-b from-transparent to-[#06030F]" />
           <div className="absolute inset-0 flex items-center justify-center">
             <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.5 }}
               className="text-center">
-              <h2 className="font-outfit font-black text-4xl text-white mb-2">Participation Analytics</h2>
-              <p className="text-white/40 text-sm">Department-wise completion rates, credit distribution, trends</p>
+              <h2 className="font-outfit font-black text-4xl text-white mb-2">Student Onboarding</h2>
+              <p className="text-white/40 text-sm">Enroll and register students on the NM MicroLearn platform</p>
             </motion.div>
           </div>
         </div>

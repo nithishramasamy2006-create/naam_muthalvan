@@ -5,20 +5,20 @@ import AIChatbot from '../../components/AIChatbot'
 export default function Page() {
   return (
     <div className="flex h-screen overflow-hidden bg-[#06030F]">
-      <Sidebar portal="college" />
+      <Sidebar portal="company" />
       <main className="flex-1 overflow-y-auto">
         <div className="sticky top-0 z-10 bg-[#06030F]/90 backdrop-blur-xl border-b border-white/5 px-8 py-5">
-          <h1 className="font-outfit font-black text-2xl text-white">Participation Analytics</h1>
-          <p className="text-white/35 text-sm">Department-wise completion rates, credit distribution, trends</p>
+          <h1 className="font-outfit font-black text-2xl text-white">Company Analytics</h1>
+          <p className="text-white/35 text-sm">Project performance, hiring metrics, talent pipeline</p>
         </div>
         <div className="relative h-56 overflow-hidden">
-          <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1200&q=80" alt="Participation Analytics" className="w-full h-full object-cover opacity-20" />
+          <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1200&q=80" alt="Company Analytics" className="w-full h-full object-cover opacity-20" />
           <div className="absolute inset-0 bg-gradient-to-b from-transparent to-[#06030F]" />
           <div className="absolute inset-0 flex items-center justify-center">
             <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.5 }}
               className="text-center">
-              <h2 className="font-outfit font-black text-4xl text-white mb-2">Participation Analytics</h2>
-              <p className="text-white/40 text-sm">Department-wise completion rates, credit distribution, trends</p>
+              <h2 className="font-outfit font-black text-4xl text-white mb-2">Company Analytics</h2>
+              <p className="text-white/40 text-sm">Project performance, hiring metrics, talent pipeline</p>
             </motion.div>
           </div>
         </div>
@@ -34,7 +34,7 @@ export default function Page() {
             ))}
           </div>
           <div className="text-center py-12">
-            <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-500 mx-auto mb-4 flex items-center justify-center opacity-40">
+            <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-orange-500 to-red-500 mx-auto mb-4 flex items-center justify-center opacity-40">
               <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><path d="M14 2L26 8V20L14 26L2 20V8L14 2Z" fill="white"/></svg>
             </div>
             <p className="text-white/25 text-sm">Full data visualization loaded from backend in production</p>
